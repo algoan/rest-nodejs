@@ -1,0 +1,76 @@
+{
+  "name": "@algoan/sdk",
+  "version": "0.0.1",
+  "description": "Algoan APIs SDK for NodeJS",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p .",
+    "commit": "git-cz",
+    "cover": "nyc --reporter=html --reporter=lcov npm test",
+    "lint": "eslint ./src/**/*.ts{,x} --fix",
+    "precommit": "lint-staged",
+    "pretest": "npm run lint && npm run build",
+    "prettier": "prettier --write '{src,test}/**/*.ts'",
+    "semantic-release": "semantic-release",
+    "test": "mocha"
+  },
+  "files": [
+    "dist/src"
+  ],
+  "keywords": [
+    "node",
+    "helpers",
+    "typescript"
+  ],
+  "author": "ccoeurderoy",
+  "license": "ISC",
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "prettier --list-different \"{src,test}/**/*.ts\""
+    ]
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "cache": false,
+    "extension": [
+      ".ts"
+    ]
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@algoan/eslint-config": "^1.0.6",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "commitizen": "^4.1.2",
+    "cz-conventional-changelog": "^3.2.0",
+    "eslint": "^7.2.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.10",
+    "prettier": "^2.0.5",
+    "semantic-release": "^17.0.8",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.9.5"
+  }
+}

@@ -1,3 +1,16 @@
 {
-  "extends": "@algoan/eslint-config"
+  "extends": "@algoan/eslint-config",
+  "rules": {
+    "@typescript-eslint/naming-convention": [
+      "error", {
+        "selector": "parameterProperty", "format": null
+      }
+    ],
+    "camelcase": [
+      "error", {
+        "properties": "never",
+        "allow": ["interface"]
+      }
+    ]
+  }
 }

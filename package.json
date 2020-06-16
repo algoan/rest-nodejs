@@ -1,5 +1,5 @@
 {
-  "name": "@algoan/sdk",
+  "name": "@algoan/rest",
   "version": "0.0.1",
   "description": "Algoan APIs SDK for NodeJS",
   "main": "dist/src/index.js",

@@ -13,7 +13,8 @@
     "pretest": "npm run lint && npm run build",
     "prettier": "prettier --write '{src,test}/**/*.ts'",
     "semantic-release": "semantic-release",
-    "test": "jest"
+    "test": "jest",
+    "test:cov": "jest --coverage"
   },
   "files": [
     "dist/src"

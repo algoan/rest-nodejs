@@ -44,7 +44,7 @@ examples/{the-file-you-want-to-test}.ts --url={your_sandbox_url} --clientid={you
 
 | Sample                   | Source code                                                   |
 |--------------------------|---------------------------------------------------------------|
-| Get all service accounts | [get-service-accounts.ts](./examples/get-service-accounts.ts) |
+| Get all service accounts | [get-service-accounts.ts](./examples/get-service-accounts)    |
 
 ## API
 

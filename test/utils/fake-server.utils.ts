@@ -6,7 +6,14 @@ const fakeAccessToken: string = 'fake_access_token';
  * @param baseUrl Base url
  */
 export const getOAuthServer = (
-  params: { baseUrl: string; isRefreshToken: boolean; nbOfCalls: number; isUserPassword: boolean } = {
+  params: {
+    baseUrl: string;
+    isRefreshToken: boolean;
+    nbOfCalls: number;
+    isUserPassword: boolean;
+    expiresIn?: number;
+    refreshExpiresIn?: number;
+  } = {
     baseUrl: 'http://localhost:3000',
     isRefreshToken: false,
     isUserPassword: false,
@@ -15,8 +22,8 @@ export const getOAuthServer = (
 ): nock.Scope => {
   const responseBody: Record<string, any> = {
     refresh_token: 'b',
-    expires_in: 0.03,
-    refresh_expires_in: 1,
+    expires_in: params.expiresIn ?? 0.03,
+    refresh_expires_in: params.refreshExpiresIn ?? 1,
     access_token: fakeAccessToken,
   };
   responseBody.grant_type = params.isRefreshToken ? 'refresh_token' : 'client_credentials';
@@ -47,6 +54,7 @@ export const getFakeAlgoanServer = (params: {
   method: 'get' | 'post' | 'patch';
   path: string;
   response: Record<string, any>;
+  nbOfCalls?: number;
 }): nock.Scope =>
   nock(params.baseUrl, {
     reqheaders: {
@@ -54,4 +62,5 @@ export const getFakeAlgoanServer = (params: {
     },
   })
     [params.method](params.path)
+    .times(params.nbOfCalls ?? 1)
     .reply(200, params.response);

@@ -8,9 +8,9 @@ export const serviceAccounts: ServiceAccount[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: 'id1',
-    clientId: 'clientId1',
-    clientSecret: 'clientSecret1',
+    id: 'id2',
+    clientId: 'clientId2',
+    clientSecret: 'clientSecret2',
     createdAt: new Date().toISOString(),
   },
 ];

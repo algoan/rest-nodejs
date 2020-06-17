@@ -37,6 +37,10 @@ export class RequestBuilder {
      */
     const { isAccessTokenExpired, isRefreshTokenExpired } = this.isExpired();
 
+    if (this.accessTokenInstance !== undefined && !isAccessTokenExpired && !isRefreshTokenExpired) {
+      return `Bearer ${this.accessTokenInstance.access_token}`;
+    }
+
     if (this.accessTokenInstance !== undefined && isAccessTokenExpired && !isRefreshTokenExpired) {
       const token: AxiosResponse<OAuthResponse> = await Axios.post<OAuthResponse>(
         `${this.baseUrl}/v1/oauth/token`,

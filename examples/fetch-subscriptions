@@ -1,0 +1,36 @@
+#! /usr/bin/env node
+const { program } = require('commander');
+
+const { Algoan } = require('../dist/src');
+
+program
+  .requiredOption('-u, --url <url>', 'Sandbox Base Url')
+  .requiredOption('-c, --client-id <clientId>', 'Your service client id')
+  .requiredOption('-s, --secret <secret>', 'Your service client secret')
+  .parse(process.argv);
+
+/**
+ * Fetch all subscriptions for all service accounts
+ */
+async function fetchSubscriptions() {
+  const algoanClient = new Algoan({
+    baseUrl: program.url,
+    clientId: program.clientId,
+    clientSecret: program.secret,
+  });
+
+  await algoanClient.getServiceAccounts();
+
+  return algoanClient.getSubscriptions();
+}
+
+fetchSubscriptions()
+  .then((subscriptions) => {
+    console.log(subscriptions);
+  })
+  .catch((err) => {
+    console.error(err);
+  })
+  .finally(() => {
+    process.exit(0);
+  })

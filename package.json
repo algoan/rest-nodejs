@@ -10,7 +10,6 @@
     "commit": "git-cz",
     "cover": "nyc --reporter=html --reporter=lcov npm test",
     "lint": "eslint ./src/**/*.ts --fix",
-    "precommit": "lint-staged",
     "pretest": "npm run lint && npm run build",
     "prettier": "prettier --write '{src,test}/**/*.ts'",
     "semantic-release": "semantic-release",
@@ -22,12 +21,15 @@
   ],
   "keywords": [
     "node",
-    "helpers",
-    "typescript"
+    "typescript",
+    "rest-api"
   ],
   "author": "ccoeurderoy",
   "license": "ISC",
   "lint-staged": {
+    "src/**/*.ts": [
+      "npm run lint"
+    ],
     "{src,test}/**/*.ts": [
       "prettier --list-different \"{src,test}/**/*.ts\""
     ]
@@ -44,9 +46,6 @@
       ".ts"
     ]
   },
-  "publishConfig": {
-    "access": "restricted"
-  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
@@ -54,6 +53,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },

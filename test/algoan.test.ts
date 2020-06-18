@@ -1,6 +1,6 @@
 import * as delay from 'delay';
 import * as nock from 'nock';
-import { Algoan, Subscription } from '../src';
+import { Algoan, Subscription, EventName } from '../src';
 import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
 import { serviceAccounts } from './samples/service-accounts';
 import { RequestBuilder } from '../src/RequestBuilder';
@@ -271,6 +271,56 @@ describe('Tests related to the Algoan class', () => {
       expect(algoanClient.serviceAccounts.get(serviceAccounts[1].id)?.subscriptions).toBeUndefined();
     });
 
-    it('ALG202 - should do nothing, no service accounts retrieved', () => {});
+    it('ALG210 - should create a new subscription for each service accounts', async () => {
+      const fakeAlgoanService: nock.Scope = getFakeAlgoanServer({
+        baseUrl,
+        method: 'post',
+        path: '/v1/subscriptions',
+        response: subscriptions[0],
+        nbOfCalls: 2,
+      });
+      getOAuthServer({
+        expiresIn: 300,
+        refreshExpiresIn: 2000,
+        baseUrl,
+        nbOfCalls: 2,
+        isUserPassword: false,
+        isRefreshToken: false,
+      });
+
+      await expect(
+        algoanClient.createSubscription({
+          target: 'http://target',
+          eventName: EventName.BANKREADER_COMPLETED,
+        }),
+      ).resolves.toEqual([subscriptions[0], subscriptions[0]]);
+      expect(fakeAlgoanService.isDone());
+      expect(algoanClient.serviceAccounts.get(serviceAccounts[0].id)?.subscriptions).toEqual([subscriptions[0]]);
+      expect(algoanClient.serviceAccounts.get(serviceAccounts[1].id)?.subscriptions).toEqual([subscriptions[0]]);
+
+      /**
+       * Add a new subscription
+       */
+      getFakeAlgoanServer({
+        baseUrl,
+        method: 'post',
+        path: '/v1/subscriptions',
+        response: subscriptions[0],
+        nbOfCalls: 1,
+      });
+      await expect(
+        algoanClient.createSubscription(
+          {
+            target: 'http://target',
+            eventName: EventName.BANKREADER_COMPLETED,
+          },
+          [serviceAccounts[0].id],
+        ),
+      ).resolves.toEqual([subscriptions[0]]);
+      expect(algoanClient.serviceAccounts.get(serviceAccounts[0].id)?.subscriptions).toEqual([
+        subscriptions[0],
+        subscriptions[0],
+      ]);
+    });
   });
 });

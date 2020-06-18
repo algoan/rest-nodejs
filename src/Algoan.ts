@@ -1,5 +1,5 @@
 import { RequestBuilder } from './RequestBuilder';
-import { ServiceAccount, ServiceAccountMap, Subscription } from './lib';
+import { ServiceAccount, ServiceAccountMap, Subscription, PostSubscriptionDTO } from './lib';
 /**
  * Algoan API
  */
@@ -55,16 +55,52 @@ export class Algoan {
    * @param serviceAccountIds List of service account ids to match with
    */
   public async getSubscriptions(serviceAccountIds: string[] = []): Promise<Subscription[]> {
+    return this.getOrCreateSubscriptions(serviceAccountIds);
+  }
+
+  /**
+   * Create a subscription for each service accounts
+   * @param body Subscription request body
+   * @param serviceAccountIds List of service account ids to match with
+   */
+  public async createSubscription(
+    body: PostSubscriptionDTO,
+    serviceAccountIds: string[] = [],
+  ): Promise<Subscription[]> {
+    return this.getOrCreateSubscriptions(serviceAccountIds, body);
+  }
+
+  /**
+   * Get or create a subscription and store them for each service accounts
+   * @param serviceAccountIds List of service accounts to match with
+   * @param body Subscription request body
+   */
+  private async getOrCreateSubscriptions(
+    serviceAccountIds: string[],
+    body?: PostSubscriptionDTO,
+  ): Promise<Subscription[]> {
     let subscriptions: Subscription[] = [];
+    const isCreate: boolean = body !== undefined;
 
     for (const sa of this.serviceAccounts.values()) {
       if (serviceAccountIds.length === 0 || serviceAccountIds.includes(sa.id)) {
-        const response: Subscription[] = await sa.requestBuilder.request({
-          method: 'GET',
+        const response: Subscription[] | Subscription = await sa.requestBuilder.request({
+          method: isCreate ? 'POST' : 'GET',
           url: '/v1/subscriptions',
+          data: body,
         });
-        subscriptions = subscriptions.concat(response);
-        sa.subscriptions = response;
+
+        if (sa.subscriptions === undefined) {
+          sa.subscriptions = [];
+        }
+
+        if (Array.isArray(response)) {
+          subscriptions = subscriptions.concat(response);
+          sa.subscriptions = response;
+        } else {
+          subscriptions.push(response);
+          sa.subscriptions.push(response);
+        }
       }
     }
 

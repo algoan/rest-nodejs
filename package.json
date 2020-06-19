@@ -7,7 +7,8 @@
   "scripts": {
     "clean-all": "rimraf dist/ node_modules/ coverage/ docs/",
     "build": "tsc -p .",
-    "doc": "typedoc --out docs src/Algoan.ts --excludePrivate --excludeNotExported",
+    "deploy:doc": "npm run docs && gh-pages --dist docs/",
+    "docs": "typedoc --out docs src/Algoan.ts --excludePrivate --excludeNotExported",
     "commit": "git-cz",
     "cover": "nyc --reporter=html --reporter=lcov npm test",
     "lint": "eslint ./src/**/*.ts --fix",
@@ -71,6 +72,7 @@
     "cz-conventional-changelog": "^3.2.0",
     "delay": "^4.3.0",
     "eslint": "^7.2.0",
+    "gh-pages": "^3.0.0",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "lint-staged": "^10.2.10",

@@ -55,3 +55,6 @@ jobs:
       - run:
           name: Publish package
           command: npm run semantic-release
+      - run:
+          name: Deploy documentation
+          command: npm run deploy:doc

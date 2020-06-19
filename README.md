@@ -17,7 +17,7 @@ Our aim is therefore to design for our partners the ultimate credit experience t
 First, install this module running:
 
 ```bash
-npm install @algoan/sdk
+npm install @algoan/rest
 ```
 
 ## Usage

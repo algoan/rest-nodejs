@@ -1,7 +1,8 @@
 import { EventName } from './Algoan.enum';
+import { SubscriptionStatus } from './Algoan.interface';
 
 /**
- * POST /subscription DTO interface
+ * POST /subscriptions DTO interface
  */
 export interface PostSubscriptionDTO {
   /** Event name to subscribe */
@@ -10,4 +11,12 @@ export interface PostSubscriptionDTO {
   target: string;
   /** Secret to decrypt x-hub-signature (more info [here](https://developers.algoan.com/public/docs/algoan_documentation/resthooks_and_events/resthooks.html#validating-resthook-events)) */
   secret?: string;
+}
+
+/**
+ * PATCH /subscriptions/:id DTO interface
+ */
+export interface PatchSubscriptionDTO {
+  /** Subscription status to update */
+  status: SubscriptionStatus;
 }

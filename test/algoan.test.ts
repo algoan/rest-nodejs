@@ -1,326 +1,127 @@
-import * as delay from 'delay';
 import * as nock from 'nock';
-import { Algoan, Subscription, EventName } from '../src';
-import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
+
+import { Algoan, EventName } from '../src';
 import { serviceAccounts } from './samples/service-accounts';
-import { RequestBuilder } from '../src/RequestBuilder';
-import { subscriptions } from './samples/subscriptions';
+import { subscriptions as subscriptionsSample } from './samples/subscriptions';
+import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
 
 describe('Tests related to the Algoan class', () => {
-  const baseUrl: string = 'http://localhost:3000';
+  describe('initRestHooks()', () => {
+    const baseUrl: string = 'http://localhost:3000';
+    let subscriptionAPI: nock.Scope;
+    let serviceAccountAPI: nock.Scope;
 
-  afterEach(() => {
-    nock.cleanAll();
-  });
-
-  describe('Authentication', () => {
-    it('ALG001 - should authenticate normally', async () => {
-      const algoanClient: Algoan = new Algoan({
+    beforeEach(() => {
+      subscriptionAPI = getFakeAlgoanServer({
         baseUrl,
-        clientId: 'a',
-        clientSecret: 'a',
-      });
-      const fakeOAuthServer: nock.Scope = getOAuthServer();
-      getFakeAlgoanServer({
-        baseUrl,
-        path: '/v1/service-accounts',
+        path: '/v1/subscriptions',
+        response: subscriptionsSample,
         method: 'get',
-        response: serviceAccounts,
+        nbOfCalls: 2,
       });
-      await algoanClient.getServiceAccounts();
-
-      expect(fakeOAuthServer.isDone()).toBeTruthy();
-    });
-
-    it('ALG002 - should authenticate normally with username/password', async () => {
-      const algoanClient: Algoan = new Algoan({
+      getOAuthServer({
         baseUrl,
-        clientId: 'a',
-        username: 'a',
-        password: 'a',
-      });
-      const fakeOAuthServer: nock.Scope = getOAuthServer({
-        baseUrl,
-        isUserPassword: true,
         isRefreshToken: false,
-        nbOfCalls: 1,
-      });
-      getFakeAlgoanServer({
-        baseUrl,
-        path: '/v1/service-accounts',
-        method: 'get',
-        response: serviceAccounts,
-      });
-      await algoanClient.getServiceAccounts();
-
-      expect(fakeOAuthServer.isDone()).toBeTruthy();
-    });
-
-    it('ALG003 - should be expired and should generate a new access token with the refresh token', async () => {
-      const algoanClient: Algoan = new Algoan({
-        baseUrl,
-        clientId: 'a',
-        clientSecret: 'a',
-      });
-      let fakeOAuthServer: nock.Scope = getOAuthServer();
-      getFakeAlgoanServer({
-        baseUrl,
-        path: '/v1/service-accounts',
-        method: 'get',
-        response: serviceAccounts,
-      });
-      await algoanClient.getServiceAccounts();
-      /**
-       * accessTokenInstance does not exist, the API is called as client_credentials
-       */
-      expect(fakeOAuthServer.isDone()).toBeTruthy();
-      /**
-       * As expires_in is set to 300ms, it should be expired
-       * The refresh_token is still valid
-       */
-      await delay(400);
-      const secondFakeOAuthServer: nock.Scope = getOAuthServer({
-        baseUrl,
-        isRefreshToken: true,
-        nbOfCalls: 1,
         isUserPassword: false,
-      });
-      getFakeAlgoanServer({
-        baseUrl,
-        path: '/v1/service-accounts',
-        method: 'get',
-        response: serviceAccounts,
-      });
-
-      await algoanClient.getServiceAccounts();
-      expect(secondFakeOAuthServer.isDone()).toBeTruthy();
-      /**
-       * Then wait for the refresh token to be expired
-       */
-      await delay(2000);
-      fakeOAuthServer = getOAuthServer();
-      getFakeAlgoanServer({
-        baseUrl,
-        path: '/v1/service-accounts',
-        method: 'get',
-        response: serviceAccounts,
-      });
-      await algoanClient.getServiceAccounts();
-      expect(fakeOAuthServer.isDone()).toBeTruthy();
-    });
-
-    it('ALG004 - should use the same access token instance', async () => {
-      const algoanClient: Algoan = new Algoan({
-        baseUrl,
-        clientId: 'a',
-        clientSecret: 'a',
-      });
-      const fakeOAuthServer: nock.Scope = getOAuthServer({
-        expiresIn: 300,
+        nbOfCalls: 3,
+        expiresIn: 500,
         refreshExpiresIn: 2000,
-        baseUrl,
-        nbOfCalls: 2,
-        isUserPassword: false,
-        isRefreshToken: false,
-      });
-      getFakeAlgoanServer({
-        baseUrl,
-        path: '/v1/service-accounts',
-        method: 'get',
-        response: serviceAccounts,
-        nbOfCalls: 2,
-      });
-      await algoanClient.getServiceAccounts();
-      /**
-       * accessTokenInstance does not exist, the API is called as client_credentials
-       */
-      expect(fakeOAuthServer.isDone()).toBeFalsy();
-      /**
-       * Call the same method
-       */
-      await algoanClient.getServiceAccounts();
-      /**
-       * Now that accessTokenInstance exist, it should not called the fake oauth server
-       */
-      expect(fakeOAuthServer.isDone()).toBeFalsy();
-    });
-  });
-
-  describe('Service Accounts', () => {
-    it('ALG100 - should successfully fetch service accounts', async () => {
-      const algoanClient: Algoan = new Algoan({
-        baseUrl,
-        clientId: '1',
-        clientSecret: '2',
-      });
-      const fakeOAuthServer: nock.Scope = getOAuthServer();
-      const fakeAlgoanServer: nock.Scope = getFakeAlgoanServer({
-        baseUrl,
-        path: '/v1/service-accounts',
-        method: 'get',
-        response: serviceAccounts,
-      });
-      await expect(algoanClient.getServiceAccounts()).resolves.toEqual(serviceAccounts);
-
-      expect(fakeAlgoanServer.isDone()).toBeTruthy();
-      expect(fakeOAuthServer.isDone()).toBeTruthy();
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[0].id)).toMatchObject({
-        ...serviceAccounts[0],
-        requestBuilder: expect.any(RequestBuilder),
-      });
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[1].id)).toMatchObject({
-        ...serviceAccounts[1],
-        requestBuilder: expect.any(RequestBuilder),
       });
     });
 
-    it('ALG101 - should successfully fetch service accounts even if it is empty', async () => {
-      const algoanClient: Algoan = new Algoan({
-        baseUrl,
-        clientId: '1',
-        clientSecret: '2',
-      });
-      const fakeOAuthServer: nock.Scope = getOAuthServer();
-      const fakeAlgoanServer: nock.Scope = getFakeAlgoanServer({
+    afterEach(() => {
+      jest.clearAllMocks();
+      nock.cleanAll();
+    });
+
+    it('ALG001 - should correctly get subscriptions and service accounts', async () => {
+      serviceAccountAPI = getFakeAlgoanServer({
         baseUrl,
         path: '/v1/service-accounts',
+        response: serviceAccounts,
         method: 'get',
+      });
+      const client: Algoan = new Algoan({
+        baseUrl,
+        clientId: 'a',
+        clientSecret: 'b',
+      });
+
+      await client.initRestHooks('http', [EventName.APPLICATION_UPDATED], 'a');
+      expect(serviceAccountAPI.isDone()).toBeTruthy();
+      expect(subscriptionAPI.isDone()).toBeTruthy();
+
+      expect(client.serviceAccounts).toHaveLength(2);
+      expect(client.serviceAccounts[0].subscriptions).toHaveLength(2);
+    });
+
+    it('ALG002 - should do nothing - no service account', async () => {
+      serviceAccountAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/service-accounts',
         response: [],
+        method: 'get',
       });
-      await expect(algoanClient.getServiceAccounts()).resolves.toEqual([]);
 
-      expect(fakeAlgoanServer.isDone()).toBeTruthy();
-      expect(fakeOAuthServer.isDone()).toBeTruthy();
-      expect(algoanClient.serviceAccounts.size).toEqual(0);
-    });
-  });
-
-  describe('Subscriptions', () => {
-    let algoanClient: Algoan;
-    /**
-     * Get all service accounts before
-     */
-    beforeEach(async () => {
-      algoanClient = new Algoan({
+      const client: Algoan = new Algoan({
         baseUrl,
-        clientId: '1',
-        clientSecret: '2',
+        clientId: 'a',
+        clientSecret: 'b',
       });
-      getOAuthServer();
-      getFakeAlgoanServer({
+
+      await client.initRestHooks('http', [EventName.APPLICATION_UPDATED], 'a');
+      expect(serviceAccountAPI.isDone()).toBeTruthy();
+      expect(subscriptionAPI.isDone()).toBeFalsy();
+
+      expect(client.serviceAccounts).toHaveLength(0);
+    });
+
+    it('ALG003 - should do nothing - no event', async () => {
+      serviceAccountAPI = getFakeAlgoanServer({
         baseUrl,
         path: '/v1/service-accounts',
-        method: 'get',
         response: serviceAccounts,
-      });
-
-      await algoanClient.getServiceAccounts();
-    });
-
-    it('ALG200 - should successfully fetch all subscriptions for all service accounts', async () => {
-      const fakeAlgoanService: nock.Scope = getFakeAlgoanServer({
-        baseUrl,
         method: 'get',
-        path: '/v1/subscriptions',
-        response: subscriptions,
-        nbOfCalls: 2,
-      });
-      /**
-       * The oAuth service will be called for the two service accounts
-       */
-      getOAuthServer({
-        expiresIn: 300,
-        refreshExpiresIn: 2000,
-        baseUrl,
-        nbOfCalls: 2,
-        isUserPassword: false,
-        isRefreshToken: false,
       });
 
-      /**
-       * Concat subscriptions
-       */
-      let expectedResult: Subscription[] = subscriptions;
-      expectedResult = expectedResult.concat(expectedResult);
-      await expect(algoanClient.getSubscriptions()).resolves.toEqual(expectedResult);
-      expect(fakeAlgoanService.isDone());
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[0].id)?.subscriptions).toEqual(subscriptions);
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[1].id)?.subscriptions).toEqual(subscriptions);
+      const client: Algoan = new Algoan({
+        baseUrl,
+        clientId: 'a',
+        clientSecret: 'b',
+      });
+
+      await client.initRestHooks('http', []);
+      expect(serviceAccountAPI.isDone()).toBeTruthy();
+      expect(subscriptionAPI.isDone()).toBeFalsy();
+
+      expect(client.serviceAccounts).toHaveLength(2);
     });
 
-    it('ALG201 - should successfully fetch all subscriptions for one service account', async () => {
-      const fakeAlgoanService: nock.Scope = getFakeAlgoanServer({
+    it('ALG001 - should correctly get subscriptions and service accounts - multiple bodies', async () => {
+      serviceAccountAPI = getFakeAlgoanServer({
         baseUrl,
+        path: '/v1/service-accounts',
+        response: serviceAccounts,
         method: 'get',
-        path: '/v1/subscriptions',
-        response: subscriptions,
-        nbOfCalls: 2,
       });
-      getOAuthServer({
-        expiresIn: 300,
-        refreshExpiresIn: 2000,
+      const client: Algoan = new Algoan({
         baseUrl,
-        nbOfCalls: 1,
-        isUserPassword: false,
-        isRefreshToken: false,
+        clientId: 'a',
+        clientSecret: 'b',
       });
 
-      await expect(algoanClient.getSubscriptions([serviceAccounts[0].id])).resolves.toEqual(subscriptions);
-      expect(fakeAlgoanService.isDone());
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[0].id)?.subscriptions).toEqual(subscriptions);
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[1].id)?.subscriptions).toBeUndefined();
-    });
-
-    it('ALG210 - should create a new subscription for each service accounts', async () => {
-      const fakeAlgoanService: nock.Scope = getFakeAlgoanServer({
-        baseUrl,
-        method: 'post',
-        path: '/v1/subscriptions',
-        response: subscriptions[0],
-        nbOfCalls: 2,
-      });
-      getOAuthServer({
-        expiresIn: 300,
-        refreshExpiresIn: 2000,
-        baseUrl,
-        nbOfCalls: 2,
-        isUserPassword: false,
-        isRefreshToken: false,
-      });
-
-      await expect(
-        algoanClient.createSubscription({
-          target: 'http://target',
-          eventName: EventName.BANKREADER_COMPLETED,
-        }),
-      ).resolves.toEqual([subscriptions[0], subscriptions[0]]);
-      expect(fakeAlgoanService.isDone());
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[0].id)?.subscriptions).toEqual([subscriptions[0]]);
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[1].id)?.subscriptions).toEqual([subscriptions[0]]);
-
-      /**
-       * Add a new subscription
-       */
-      getFakeAlgoanServer({
-        baseUrl,
-        method: 'post',
-        path: '/v1/subscriptions',
-        response: subscriptions[0],
-        nbOfCalls: 1,
-      });
-      await expect(
-        algoanClient.createSubscription(
-          {
-            target: 'http://target',
-            eventName: EventName.BANKREADER_COMPLETED,
-          },
-          [serviceAccounts[0].id],
-        ),
-      ).resolves.toEqual([subscriptions[0]]);
-      expect(algoanClient.serviceAccounts.get(serviceAccounts[0].id)?.subscriptions).toEqual([
-        subscriptions[0],
-        subscriptions[0],
+      await client.initRestHooks([
+        {
+          target: 'http://',
+          eventName: EventName.APPLICATION_UPDATED,
+          secret: 'a',
+        },
       ]);
+      expect(serviceAccountAPI.isDone()).toBeTruthy();
+      expect(subscriptionAPI.isDone()).toBeTruthy();
+
+      expect(client.serviceAccounts).toHaveLength(2);
+      expect(client.serviceAccounts[0].subscriptions).toHaveLength(2);
     });
   });
 });

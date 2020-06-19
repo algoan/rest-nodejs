@@ -1,10 +1,9 @@
-import { RequestBuilder } from '../RequestBuilder';
 import { EventName } from './Algoan.enum';
 
 /**
  * Service account body
  */
-export interface ServiceAccount {
+export interface IServiceAccount {
   id: string;
   clientId: string;
   clientSecret: string;
@@ -15,18 +14,15 @@ export interface ServiceAccount {
  * Subscription interface
  * https://developers.algoan.com/api/#operation/getResthookSubs
  */
-export interface Subscription {
+export interface ISubscription {
   id: string;
   eventName: EventName;
   secret?: string;
-  status: 'ACTIVE' | 'DISABLE' | 'INACTIVE';
+  status: SubscriptionStatus;
   target: string;
 }
 
 /**
- * Extended service account map
+ * Subscription statuses
  */
-export interface ServiceAccountMap extends ServiceAccount {
-  subscriptions?: Subscription[];
-  requestBuilder: RequestBuilder;
-}
+export type SubscriptionStatus = 'ACTIVE' | 'DISABLE' | 'INACTIVE';

@@ -1,6 +1,6 @@
-import { ServiceAccount } from '../../src/lib';
+import { IServiceAccount } from '../../src/lib';
 
-export const serviceAccounts: ServiceAccount[] = [
+export const serviceAccounts: IServiceAccount[] = [
   {
     id: 'id1',
     clientId: 'clientId1',

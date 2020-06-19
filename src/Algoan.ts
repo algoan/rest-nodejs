@@ -1,5 +1,6 @@
 import { RequestBuilder } from './RequestBuilder';
-import { ServiceAccount, ServiceAccountMap, Subscription, PostSubscriptionDTO } from './lib';
+import { PostSubscriptionDTO, EventName } from './lib';
+import { ServiceAccount } from './core/ServiceAccount';
 /**
  * Algoan API
  */
@@ -11,7 +12,7 @@ export class Algoan {
   /**
    * Service accounts stored in-memory
    */
-  public serviceAccounts: Map<string, ServiceAccountMap>;
+  public serviceAccounts: ServiceAccount[];
   /**
    * Request builder instance
    */
@@ -25,87 +26,67 @@ export class Algoan {
       username: parameters.username,
       password: parameters.password,
     });
-    this.serviceAccounts = new Map();
+    this.serviceAccounts = [];
   }
 
   /**
-   * Return all service accounts and store them in-memory
+   * Init RestHooks
+   * 1. Retrieves service accounts and store them in-memory
+   * 2. For each service accounts, get or create subscriptions
+   * @param target Unique BaseURL used for all of your services
+   * @param events List of events to subscribe to
+   * @param secret Optional secret, used to encrypt the X-Hub-Signature header
    */
-  public async getServiceAccounts(): Promise<ServiceAccount[]> {
-    const serviceAccounts: ServiceAccount[] = await this.requestBuilder.request({
-      method: 'GET',
-      url: '/v1/service-accounts',
-    });
+  public async initRestHooks(target: string, events: EventName[], secret?: string): Promise<void>;
+  /**
+   * Init RestHooks
+   * 1. Retrieves service accounts and store them in-memory
+   * 2. For each service accounts, get or create subscriptions
+   * @param subscriptionBodies List of subscription request body to create subscriptions
+   */
+  public async initRestHooks(subscriptionBodies: PostSubscriptionDTO[]): Promise<void>;
+  public async initRestHooks(
+    subscriptionOrTarget: string | PostSubscriptionDTO[],
+    events: EventName[] = [],
+    secret?: string,
+  ): Promise<void> {
+    this.serviceAccounts = await ServiceAccount.get(this.baseUrl, this.requestBuilder);
 
-    for (const serviceAccount of serviceAccounts) {
-      this.serviceAccounts.set(serviceAccount.id, {
-        ...serviceAccount,
-        requestBuilder: new RequestBuilder(this.baseUrl, {
-          clientId: serviceAccount.clientId,
-          clientSecret: serviceAccount.clientSecret,
-        }),
-      });
+    if (this.serviceAccounts.length === 0) {
+      return;
     }
 
-    return serviceAccounts;
-  }
-
-  /**
-   * Get subscriptions for one particular service accounts or all of them
-   * @param serviceAccountIds List of service account ids to match with
-   */
-  public async getSubscriptions(serviceAccountIds: string[] = []): Promise<Subscription[]> {
-    return this.getOrCreateSubscriptions(serviceAccountIds);
-  }
-
-  /**
-   * Create a subscription for each service accounts
-   * @param body Subscription request body
-   * @param serviceAccountIds List of service account ids to match with
-   */
-  public async createSubscription(
-    body: PostSubscriptionDTO,
-    serviceAccountIds: string[] = [],
-  ): Promise<Subscription[]> {
-    return this.getOrCreateSubscriptions(serviceAccountIds, body);
-  }
-
-  /**
-   * Get or create a subscription and store them for each service accounts
-   * @param serviceAccountIds List of service accounts to match with
-   * @param body Subscription request body
-   */
-  private async getOrCreateSubscriptions(
-    serviceAccountIds: string[],
-    body?: PostSubscriptionDTO,
-  ): Promise<Subscription[]> {
-    let subscriptions: Subscription[] = [];
-    const isCreate: boolean = body !== undefined;
-
-    for (const sa of this.serviceAccounts.values()) {
-      if (serviceAccountIds.length === 0 || serviceAccountIds.includes(sa.id)) {
-        const response: Subscription[] | Subscription = await sa.requestBuilder.request({
-          method: isCreate ? 'POST' : 'GET',
-          url: '/v1/subscriptions',
-          data: body,
-        });
-
-        if (sa.subscriptions === undefined) {
-          sa.subscriptions = [];
-        }
-
-        if (Array.isArray(response)) {
-          subscriptions = subscriptions.concat(response);
-          sa.subscriptions = response;
-        } else {
-          subscriptions.push(response);
-          sa.subscriptions.push(response);
-        }
-      }
+    if (typeof subscriptionOrTarget === 'string' && events.length === 0) {
+      return;
     }
 
-    return subscriptions;
+    const subscriptionDTO: PostSubscriptionDTO[] =
+      typeof subscriptionOrTarget === 'string'
+        ? this.fromEventToSubscriptionDTO(subscriptionOrTarget, events, secret)
+        : subscriptionOrTarget;
+
+    for (const serviceAccount of this.serviceAccounts) {
+      await serviceAccount.getOrCreateSubscriptions(subscriptionDTO);
+    }
   }
+
+  /**
+   * Transform a list of events to a Subscription request body
+   * @param target Base URL
+   * @param eventName List of events
+   * @param secret Secret
+   */
+  private readonly fromEventToSubscriptionDTO = (
+    target: string,
+    events: EventName[],
+    secret?: string,
+  ): PostSubscriptionDTO[] =>
+    events.map((event: EventName) => ({
+      status: 'ACTIVE',
+      target,
+      secret,
+      eventName: event,
+    }));
 }
 
 /**

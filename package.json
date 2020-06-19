@@ -5,6 +5,7 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
+    "clean-all": "rimraf dist/ node_modules/ coverage/ docs/",
     "build": "tsc -p .",
     "doc": "typedoc --out docs src/Algoan.ts --excludePrivate --excludeNotExported",
     "commit": "git-cz",
@@ -75,6 +76,7 @@
     "lint-staged": "^10.2.10",
     "nock": "^12.0.3",
     "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
     "semantic-release": "^17.0.8",
     "ts-jest": "^26.1.0",
     "ts-node": "^8.10.2",

@@ -1,5 +1,5 @@
-import { Subscription } from '../../src';
 import { EventName } from '../../src/lib/Algoan.enum';
+import { Subscription } from '../../src/core/Subscription';
 
 export const subscriptions: Subscription[] = [
   {
@@ -16,4 +16,4 @@ export const subscriptions: Subscription[] = [
     eventName: EventName.LEGAL_DOCUMENTS_REQUIRED,
     status: 'ACTIVE',
   },
-];
+] as Subscription[];

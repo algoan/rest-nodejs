@@ -11,7 +11,7 @@
     "outDir": "dist",                      /* Redirect output structure to the directory. */
     "removeComments": true,                /* Do not emit comments to output. */
     "noEmit": false,                       /* Do not emit outputs. */
-    "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
+    "importHelpers": false,                 /* Import emit helpers from 'tslib'. */
     "isolatedModules": false,              /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 
     /* Strict Type-Checking Options */        

@@ -34,28 +34,8 @@ const client: Algoan = new Algoan({
 });
 ```
 
-## Examples
-
-You can run examples using [ts-node](https://github.com/TypeStrong/ts-node):
-
-```bash
-examples/{the-file-you-want-to-test}.ts --url={your_sandbox_url} --clientid={your_client_id} --secret={your_client_secret}
-```
-
-| Sample                   | Source code                                                   |
-|--------------------------|---------------------------------------------------------------|
-| Get all service accounts | [get-service-accounts.ts](./examples/get-service-accounts)    |
 
 ## API
 
 To be able to use this SDK, you need to ask to an Algoan administrator credentials to [support@algoan.com].
 
-### `getServiceAccounts()`
-
-Retrieves all service accounts related to your credentials.
-
-```typescript
-await client.getServiceAccounts();
-```
-
-Returns a [list of service accounts](https://developers.algoan.com/api/#operation/serviceAccount).

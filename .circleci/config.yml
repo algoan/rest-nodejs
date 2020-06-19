@@ -16,8 +16,6 @@ workflows:
             branches:
                only:
                 - master
-                - beta
-
 
 
 imageA: &defaults

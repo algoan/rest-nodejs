@@ -15,7 +15,7 @@
     "prettier": "prettier --write '{src,test}/**/*.ts'",
     "semantic-release": "semantic-release",
     "test": "jest",
-    "test:cov": "jest --coverage"
+    "test:cov": "npm test -- --coverage"
   },
   "files": [
     "dist/src"

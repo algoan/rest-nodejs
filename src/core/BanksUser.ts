@@ -1,4 +1,4 @@
-import { IBanksUser, BanksUserStatus, PlugIn, Score, Analysis } from '../lib';
+import { IBanksUser, BanksUserStatus, PlugIn, Score, Analysis, PatchBanksUserDTO } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
 /**
@@ -41,8 +41,12 @@ export class BanksUser {
    * Set of indicators representing the state of user banking and financial information
    */
   public analysis: Analysis;
+  /**
+   * Request builder instance
+   */
+  private readonly requestBuilder: RequestBuilder;
 
-  constructor(params: IBanksUser) {
+  constructor(params: IBanksUser, requestBuilder: RequestBuilder) {
     this.id = params.id;
     this.status = params.status;
     this.redirectUrl = params.redirectUrl;
@@ -52,6 +56,7 @@ export class BanksUser {
     this.plugIn = params.plugIn;
     this.scores = params.scores;
     this.analysis = params.analysis;
+    this.requestBuilder = requestBuilder;
   }
 
   /**
@@ -66,6 +71,28 @@ export class BanksUser {
       method: 'GET',
     });
 
-    return new BanksUser(banksUser);
+    return new BanksUser(banksUser, requestBuilder);
+  }
+
+  /**
+   * Update a banksUser
+   * @param body Patch banks user request body
+   */
+  public async update(body: PatchBanksUserDTO): Promise<void> {
+    const banksUser: IBanksUser = await this.requestBuilder.request({
+      url: `/v1/banks-users/${this.id}`,
+      method: 'PATCH',
+      data: body,
+    });
+
+    this.id = banksUser.id;
+    this.status = banksUser.status;
+    this.redirectUrl = banksUser.redirectUrl;
+    this.redirectUrlCreatedAt = banksUser.redirectUrlCreatedAt;
+    this.redirectUrlTTL = banksUser.redirectUrlTTL;
+    this.callbackUrl = banksUser.callbackUrl;
+    this.plugIn = banksUser.plugIn;
+    this.scores = banksUser.scores;
+    this.analysis = banksUser.analysis;
   }
 }

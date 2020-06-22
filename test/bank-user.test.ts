@@ -11,12 +11,6 @@ describe('Tests related to the BanksUser class', () => {
   let requestBuilder: RequestBuilder;
 
   beforeEach(() => {
-    banksUserAPI = getFakeAlgoanServer({
-      baseUrl,
-      path: '/v1/banks-users/id1',
-      response: banksUserSample,
-      method: 'get',
-    });
     getOAuthServer({
       baseUrl,
       isRefreshToken: false,
@@ -37,10 +31,40 @@ describe('Tests related to the BanksUser class', () => {
   });
 
   describe('static getBanksUserById()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1',
+        response: banksUserSample,
+        method: 'get',
+      });
+    });
     it('should get the Banks User account', async () => {
       const banksUser: BanksUser = await BanksUser.getBanksUserById('id1', requestBuilder);
       expect(banksUserAPI.isDone()).toBeTruthy();
       expect(banksUser).toBeInstanceOf(BanksUser);
+    });
+  });
+
+  describe('update()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1',
+        response: banksUserSample,
+        method: 'patch',
+      });
+    });
+    it('should update the BanksUser', async () => {
+      const banksUser: BanksUser = new BanksUser(banksUserSample, requestBuilder);
+      banksUser.status = 'NEW';
+
+      await banksUser.update({
+        status: 'FINISHED',
+      });
+
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(banksUser.status).toEqual('FINISHED');
     });
   });
 });

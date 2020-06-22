@@ -42,7 +42,7 @@ export class BanksUser {
    */
   public analysis: Analysis;
 
-  constructor(params: IBanksUser, private readonly requestBuilder: RequestBuilder) {
+  constructor(params: IBanksUser) {
     this.id = params.id;
     this.status = params.status;
     this.redirectUrl = params.redirectUrl;
@@ -66,6 +66,6 @@ export class BanksUser {
       method: 'GET',
     });
 
-    return new BanksUser(banksUser, requestBuilder);
+    return new BanksUser(banksUser);
   }
 }

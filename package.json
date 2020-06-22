@@ -7,7 +7,7 @@
   "scripts": {
     "clean-all": "rimraf dist/ node_modules/ coverage/ docs/",
     "build": "tsc -p .",
-    "deploy:doc": "npm run docs && gh-pages --dist docs/",
+    "deploy:doc": "gh-pages --dist docs/ --dotfiles --message 'Update documentation [skip ci]'",
     "docs": "typedoc --out docs src/Algoan.ts --excludePrivate --excludeNotExported",
     "commit": "git-cz",
     "cover": "nyc --reporter=html --reporter=lcov npm test",
@@ -89,5 +89,8 @@
   },
   "dependencies": {
     "axios": "^0.19.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

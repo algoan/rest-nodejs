@@ -56,5 +56,16 @@ jobs:
           name: Publish package
           command: npm run semantic-release
       - run:
+          name: Configure Git to deploy the documentation
+          command: |
+            git config user.email "bot@algoan.com"
+            git config user.name "Algoan bot"
+      - run:
+          name: Build documentation
+          command: npm run docs
+      - run:
+          name: Disable jekyll builds
+          command: touch docs/.nojekyll
+      - run:
           name: Deploy documentation
           command: npm run deploy:doc

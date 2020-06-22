@@ -1,4 +1,4 @@
-import { IBanksUser, BanksUserStatus, PlugIn, Score, Analysis } from '../lib';
+import { IBanksUser, BanksUserStatus, PlugIn, Score, Analysis, PatchBanksUserDTO } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
 /**
@@ -78,7 +78,7 @@ export class BanksUser {
    * Update a banksUser
    * @param body Patch banks user request body
    */
-  public async update(body: Partial<IBanksUser>): Promise<void> {
+  public async update(body: PatchBanksUserDTO): Promise<void> {
     const banksUser: IBanksUser = await this.requestBuilder.request({
       url: `/v1/banks-users/${this.id}`,
       method: 'PATCH',

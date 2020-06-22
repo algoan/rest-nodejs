@@ -1,5 +1,5 @@
 import { EventName } from './Algoan.enum';
-import { SubscriptionStatus } from './Algoan.interface';
+import { SubscriptionStatus, BanksUserStatus, PlugIn, Score, Analysis } from './Algoan.interface';
 
 /**
  * POST /subscriptions DTO interface
@@ -19,4 +19,16 @@ export interface PostSubscriptionDTO {
 export interface PatchSubscriptionDTO {
   /** Subscription status to update */
   status: SubscriptionStatus;
+}
+
+/**
+ * PATCH /banks-user/:id DTO interface
+ */
+export interface PatchBanksUserDTO {
+  status?: BanksUserStatus;
+  redirectUrl?: string;
+  redirectUrlTTL?: number;
+  plugIn?: PlugIn;
+  scores?: Score[];
+  analysis?: Analysis;
 }

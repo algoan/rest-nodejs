@@ -1,4 +1,13 @@
-import { IBanksUser, BanksUserStatus, PlugIn, Score, Analysis, PatchBanksUserDTO } from '../lib';
+import {
+  IBanksUser,
+  BanksUserStatus,
+  PlugIn,
+  Score,
+  Analysis,
+  PatchBanksUserDTO,
+  PostBanksUserAccountDTO,
+  PostBanksUserTransactionDTO,
+} from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
 /**
@@ -94,5 +103,33 @@ export class BanksUser {
     this.plugIn = banksUser.plugIn;
     this.scores = banksUser.scores;
     this.analysis = banksUser.analysis;
+  }
+
+  /**
+   * Creates accounts for the BankUser
+   * @param body Array of BanksUser Accounts to Post
+   */
+  public async createAccounts(body: PostBanksUserAccountDTO[]): Promise<void> {
+    await Promise.all(
+      body.map(async (banksUserAccount) =>
+        this.requestBuilder.request({
+          url: `/v1/banks-users/${this.id}/accounts`,
+          method: 'POST',
+          data: banksUserAccount,
+        }),
+      ),
+    );
+  }
+
+  /**
+   * Creates transactions for the given BankUser accounts
+   * @param body Array of Transactions to Post
+   */
+  public async createTransactions(accountId: string, body: PostBanksUserTransactionDTO[]): Promise<void> {
+    await this.requestBuilder.request({
+      url: `/v1/banks-users/${this.id}/accounts/${accountId}/transactions`,
+      method: 'POST',
+      data: body,
+    });
   }
 }

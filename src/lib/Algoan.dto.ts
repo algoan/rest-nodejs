@@ -1,5 +1,15 @@
 import { EventName } from './Algoan.enum';
-import { SubscriptionStatus, BanksUserStatus, PlugIn, Score, Analysis } from './Algoan.interface';
+import {
+  SubscriptionStatus,
+  BanksUserStatus,
+  PlugIn,
+  Score,
+  Analysis,
+  LoanDetails,
+  BanksUserTransactionType,
+  MultiResourceCreationResponse,
+  BanksUserTransaction,
+} from './Algoan.interface';
 
 /**
  * POST /subscriptions DTO interface
@@ -31,4 +41,47 @@ export interface PatchBanksUserDTO {
   plugIn?: PlugIn;
   scores?: Score[];
   analysis?: Analysis;
+}
+
+/**
+ * POST /banks-user/:id/accounts DTO interface
+ */
+export interface PostBanksUserAccountDTO {
+  balance: number;
+  balanceDate: string;
+  connectionSource: string;
+  currency: string;
+  type: 'CHECKINGS' | 'SAVINGS' | 'LOAN' | 'CREDIT_CARD';
+  usage: 'PROFESSIONAL' | 'PERSONAL';
+  bank?: string;
+  bic?: string;
+  iban?: string;
+  loanDetails?: LoanDetails;
+  name?: string;
+  reference?: string;
+  savingsDetails?: string;
+  status?: 'MANUAL' | 'ACTIVE' | 'ERROR' | 'NOT_FOUND' | 'CLOSED';
+}
+
+/**
+ * POST /banks-user/:id/accounts/:accountId/transactions DTO interface
+ */
+export interface PostBanksUserTransactionDTO {
+  amount: number;
+  category: string;
+  date: string;
+  description: string;
+  type: BanksUserTransactionType;
+  banksUserCardId?: string;
+  currency?: string;
+  reference?: string;
+  simplifiedDescription?: string;
+  userDescription?: string;
+}
+
+/**
+ * /banks-user/:id/accounts/:accountId/transactions response
+ */
+export interface PostBanksUserAccountDTOResponse extends MultiResourceCreationResponse {
+  elements: { resource: BanksUserTransaction; status: number }[];
 }

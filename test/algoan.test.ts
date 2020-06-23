@@ -1,6 +1,6 @@
 import * as nock from 'nock';
 
-import { Algoan, EventName } from '../src';
+import { Algoan, EventName, ServiceAccount, Subscription, RequestBuilder } from '../src';
 import { serviceAccounts } from './samples/service-accounts';
 import { subscriptions as subscriptionsSample } from './samples/subscriptions';
 import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
@@ -97,7 +97,7 @@ describe('Tests related to the Algoan class', () => {
       expect(client.serviceAccounts).toHaveLength(2);
     });
 
-    it('ALG001 - should correctly get subscriptions and service accounts - multiple bodies', async () => {
+    it('ALG004 - should correctly get subscriptions and service accounts - multiple bodies', async () => {
       serviceAccountAPI = getFakeAlgoanServer({
         baseUrl,
         path: '/v1/service-accounts',
@@ -122,6 +122,30 @@ describe('Tests related to the Algoan class', () => {
 
       expect(client.serviceAccounts).toHaveLength(2);
       expect(client.serviceAccounts[0].subscriptions).toHaveLength(2);
+    });
+  });
+
+  describe('getServiceAccountBySubscriptionId()', () => {
+    it('ALG010 - should get a service account stored in-memory', () => {
+      const client: Algoan = new Algoan({
+        baseUrl: 'random',
+        clientId: 'a',
+        clientSecret: 'b',
+      });
+
+      client.serviceAccounts.push(new ServiceAccount('https://', serviceAccounts[0]));
+      client.serviceAccounts[0].subscriptions.push(
+        new Subscription(
+          subscriptionsSample[0],
+          new RequestBuilder('http://', {
+            clientSecret: 'a',
+            clientId: 'a',
+          }),
+        ),
+      );
+
+      expect(client.getServiceAccountBySubscriptionId(subscriptionsSample[0].id)).toEqual(client.serviceAccounts[0]);
+      expect(client.getServiceAccountBySubscriptionId('random')).toBeUndefined();
     });
   });
 });

@@ -1,6 +1,7 @@
 import { RequestBuilder } from './RequestBuilder';
 import { PostSubscriptionDTO, EventName } from './lib';
 import { ServiceAccount } from './core/ServiceAccount';
+import { Subscription } from './core';
 /**
  * Algoan API
  */
@@ -68,6 +69,16 @@ export class Algoan {
     for (const serviceAccount of this.serviceAccounts) {
       await serviceAccount.getOrCreateSubscriptions(subscriptionDTO);
     }
+  }
+
+  /**
+   * Get a service account with a given subscription id
+   * @param subscriptionId Unique subscription identifier
+   */
+  public getServiceAccountBySubscriptionId(subscriptionId: string): ServiceAccount | undefined {
+    return this.serviceAccounts.find((sa: ServiceAccount) =>
+      sa.subscriptions.find((sub: Subscription) => sub.id === subscriptionId),
+    );
   }
 
   /**

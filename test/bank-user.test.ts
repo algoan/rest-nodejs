@@ -3,7 +3,12 @@ import * as nock from 'nock';
 import { RequestBuilder } from '../src/RequestBuilder';
 import { BanksUser } from '../src/core/BanksUser';
 import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
-import { banksUser as banksUserSample } from './samples/banks-users';
+import {
+  banksUser as banksUserSample,
+  banksUserAccount as banksUserAccountSample,
+  banksUserTransaction as banksUserTransactionSample,
+  banksUserTransactionResponse as banksUserTransactionResponseSample,
+} from './samples/banks-users';
 
 describe('Tests related to the BanksUser class', () => {
   const baseUrl: string = 'http://localhost:3000';
@@ -65,6 +70,42 @@ describe('Tests related to the BanksUser class', () => {
 
       expect(banksUserAPI.isDone()).toBeTruthy();
       expect(banksUser.status).toEqual('FINISHED');
+    });
+  });
+
+  describe('createAccounts()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1/accounts',
+        response: banksUserAccountSample,
+        method: 'post',
+      });
+    });
+    it('should create accounts on the BanksUser', async () => {
+      const banksUser: BanksUser = new BanksUser(banksUserSample, requestBuilder);
+
+      await banksUser.createAccounts([banksUserAccountSample]);
+
+      expect(banksUserAPI.isDone()).toBeTruthy();
+    });
+  });
+
+  describe('createTransactions()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1/accounts/accountId1/transactions',
+        response: banksUserTransactionResponseSample,
+        method: 'post',
+      });
+    });
+    it('should create accounts on the BanksUser', async () => {
+      const banksUser: BanksUser = new BanksUser(banksUserSample, requestBuilder);
+
+      await banksUser.createTransactions('accountId1', [banksUserTransactionSample]);
+
+      expect(banksUserAPI.isDone()).toBeTruthy();
     });
   });
 });

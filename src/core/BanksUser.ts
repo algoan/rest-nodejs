@@ -1,4 +1,15 @@
-import { IBanksUser, BanksUserStatus, PlugIn, Score, Analysis, PatchBanksUserDTO } from '../lib';
+import {
+  IBanksUser,
+  BanksUserStatus,
+  PlugIn,
+  Score,
+  Analysis,
+  PatchBanksUserDTO,
+  PostBanksUserAccountDTO,
+  PostBanksUserTransactionDTO,
+  MultiResourceCreationResponse,
+  BanksUserTransaction,
+} from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
 /**
@@ -94,5 +105,41 @@ export class BanksUser {
     this.plugIn = banksUser.plugIn;
     this.scores = banksUser.scores;
     this.analysis = banksUser.analysis;
+  }
+
+  /**
+   * Creates accounts for the BankUser
+   * @param body Array of BanksUser Accounts to Post
+   */
+  public async createAccounts(body: PostBanksUserAccountDTO[]): Promise<PostBanksUserAccountDTO[]> {
+    const accounts: PostBanksUserAccountDTO[] = await Promise.all(
+      body.map(
+        async (banksUserAccount): Promise<PostBanksUserAccountDTO> =>
+          this.requestBuilder.request({
+            url: `/v1/banks-users/${this.id}/accounts`,
+            method: 'POST',
+            data: banksUserAccount,
+          }),
+      ),
+    );
+
+    return accounts;
+  }
+
+  /**
+   * Creates transactions for the given BankUser accounts
+   * @param body Array of Transactions to Post
+   */
+  public async createTransactions(
+    accountId: string,
+    body: PostBanksUserTransactionDTO[],
+  ): Promise<MultiResourceCreationResponse<BanksUserTransaction>> {
+    const transactions: MultiResourceCreationResponse<BanksUserTransaction> = await this.requestBuilder.request({
+      url: `/v1/banks-users/${this.id}/accounts/${accountId}/transactions`,
+      method: 'POST',
+      data: body,
+    });
+
+    return transactions;
   }
 }

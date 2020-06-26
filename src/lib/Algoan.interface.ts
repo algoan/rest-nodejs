@@ -183,7 +183,7 @@ export type BanksUserTransactionType =
 /**
  * Multiple Resource Creation Response Scheme
  */
-export interface MultiResourceCreationResponse {
-  elements: { resource: unknown; status: number }[];
+export interface MultiResourceCreationResponse<T> {
+  elements: { resource: T; status: number }[];
   metadata: { failure: number; sucess: number; total: number };
 }

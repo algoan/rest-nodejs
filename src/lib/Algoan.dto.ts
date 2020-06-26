@@ -7,8 +7,6 @@ import {
   Analysis,
   LoanDetails,
   BanksUserTransactionType,
-  MultiResourceCreationResponse,
-  BanksUserTransaction,
 } from './Algoan.interface';
 
 /**
@@ -77,11 +75,4 @@ export interface PostBanksUserTransactionDTO {
   reference?: string;
   simplifiedDescription?: string;
   userDescription?: string;
-}
-
-/**
- * /banks-user/:id/accounts/:accountId/transactions response
- */
-export interface PostBanksUserAccountDTOResponse extends MultiResourceCreationResponse {
-  elements: { resource: BanksUserTransaction; status: number }[];
 }

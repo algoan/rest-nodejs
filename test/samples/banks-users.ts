@@ -1,4 +1,4 @@
-import { IBanksUser, BanksUserAccount, BanksUserTransaction, PostBanksUserAccountDTOResponse } from '../../src/lib';
+import { IBanksUser, BanksUserAccount, BanksUserTransaction, MultiResourceCreationResponse } from '../../src/lib';
 
 export const banksUser: IBanksUser = {
   id: 'id1',
@@ -36,7 +36,7 @@ export const banksUserTransaction: BanksUserTransaction = {
   type: 'ATM',
 };
 
-export const banksUserTransactionResponse: PostBanksUserAccountDTOResponse = {
+export const banksUserTransactionResponse: MultiResourceCreationResponse<BanksUserTransaction> = {
   elements: [{ resource: banksUserTransaction, status: 200 }],
   metadata: { failure: 0, sucess: 1, total: 1 },
 };

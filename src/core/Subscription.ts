@@ -1,3 +1,5 @@
+import { createHmac } from 'crypto';
+
 import { EventName, SubscriptionStatus, ISubscription, PostSubscriptionDTO, PatchSubscriptionDTO } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
@@ -75,5 +77,21 @@ export class Subscription {
     });
 
     this.status = body.status;
+  }
+
+  /**
+   * Validates an Algoan Resthook with the "x-hub-signature" header
+   * More information here: https://developers.algoan.com/public/docs/algoan_documentation/resthooks_and_events/resthooks.html#validating-resthook-events
+   * @param signatureHeader Signature header received
+   * @param payload Payload sent
+   */
+  public validateSignature(signatureHeader: string, payload: { [key: string]: string }): boolean {
+    if (this.secret === undefined) {
+      return true;
+    }
+
+    const expectedHash: string = createHmac('sha256', this.secret).update(JSON.stringify(payload)).digest('hex');
+
+    return expectedHash === signatureHeader;
   }
 }

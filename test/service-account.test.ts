@@ -185,4 +185,19 @@ describe('Tests related to the ServiceAccount class', () => {
       expect(mockUpdate).toHaveBeenCalledWith({ status: 'ACTIVE' });
     });
   });
+
+  describe('getAuthorizationHeader', () => {
+    it('SA40 - should get the authorization header', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+
+      const token: string = await serviceAccount.getAuthorizationHeader();
+
+      expect(token).toEqual('Bearer fake_access_token');
+    });
+  });
 });

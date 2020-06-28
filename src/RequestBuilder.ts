@@ -31,7 +31,7 @@ export class RequestBuilder {
   /**
    * Set the authorization header
    */
-  private async getAuthorizationHeader(): Promise<string> {
+  public async getAuthorizationHeader(): Promise<string> {
     /*
      * If the access token is already defined, check if it is expired
      */

@@ -105,4 +105,11 @@ export class ServiceAccount {
       }),
     );
   }
+
+  /**
+   * Get the service account authorization header
+   */
+  public async getAuthorizationHeader(): Promise<string> {
+    return this.requestBuilder.getAuthorizationHeader();
+  }
 }

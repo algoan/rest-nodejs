@@ -1,7 +1,8 @@
 import { RequestBuilder } from '../RequestBuilder';
 import { IServiceAccount } from '..';
-import { PostSubscriptionDTO } from '../lib';
+import { PostSubscriptionDTO, IBanksUser } from '../lib';
 import { Subscription } from './Subscription';
+import { BanksUser } from './BanksUser';
 
 /**
  * Service account class
@@ -104,5 +105,20 @@ export class ServiceAccount {
         return subscription;
       }),
     );
+  }
+
+  /**
+   * Fetch a banksUser by ID
+   *
+   * @param id Id of the BanksUser to fetch
+   * @param requestBuilder Service account request builder
+   */
+  public async getBanksUserById(id: string): Promise<BanksUser> {
+    const banksUser: IBanksUser = await this.requestBuilder.request({
+      url: `/v1/banks-users/${id}`,
+      method: 'GET',
+    });
+
+    return new BanksUser(banksUser, this.requestBuilder);
   }
 }

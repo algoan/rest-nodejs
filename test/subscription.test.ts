@@ -1,3 +1,4 @@
+import { createHmac } from 'crypto';
 import * as nock from 'nock';
 
 import { RequestBuilder } from '../src/RequestBuilder';
@@ -137,6 +138,71 @@ describe('Tests related to the Subscription class', () => {
 
       expect(subscriptionAPI.isDone()).toBeTruthy();
       expect(subscription.status).toEqual('ACTIVE');
+    });
+  });
+
+  describe('validateSignature()', () => {
+    const baseUrl: string = 'http://localhost:3000';
+    let requestBuilder: RequestBuilder;
+    const secret: string = 'random_secret';
+    const fakePayloadSent: {} = {
+      banksUserId: 'id',
+    };
+    const hash: string = createHmac('sha256', secret).update(JSON.stringify(fakePayloadSent)).digest('hex');
+
+    beforeEach(() => {
+      requestBuilder = new RequestBuilder(baseUrl, {
+        clientId: 'a',
+        clientSecret: 's',
+      });
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+      nock.cleanAll();
+    });
+    it('SB030 - should be valid - no secret defined', () => {
+      const subscription: Subscription = new Subscription(
+        {
+          target: baseUrl,
+          id: '1',
+          eventName: EventName.APPLICATION_UPDATED,
+          status: 'DISABLE',
+        },
+        requestBuilder,
+      );
+
+      expect(subscription.validateSignature(hash, fakePayloadSent)).toBeTruthy();
+    });
+
+    it('SB031 - should be valid', () => {
+      const subscription: Subscription = new Subscription(
+        {
+          target: baseUrl,
+          id: '1',
+          eventName: EventName.APPLICATION_UPDATED,
+          status: 'DISABLE',
+          secret,
+        },
+        requestBuilder,
+      );
+
+      expect(subscription.validateSignature(hash, fakePayloadSent)).toBeTruthy();
+    });
+
+    it('SB032 - should not be valid', () => {
+      const subscription: Subscription = new Subscription(
+        {
+          target: baseUrl,
+          id: '1',
+          eventName: EventName.APPLICATION_UPDATED,
+          status: 'DISABLE',
+          secret: 'other_secret',
+        },
+        requestBuilder,
+      );
+
+      expect(subscription.validateSignature(hash, fakePayloadSent)).toBeFalsy();
     });
   });
 });

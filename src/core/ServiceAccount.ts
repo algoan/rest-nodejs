@@ -1,6 +1,6 @@
 import { RequestBuilder } from '../RequestBuilder';
 import { IServiceAccount } from '..';
-import { PostSubscriptionDTO, IBanksUser } from '../lib';
+import { PostSubscriptionDTO } from '../lib';
 import { Subscription } from './Subscription';
 import { BanksUser } from './BanksUser';
 
@@ -120,11 +120,6 @@ export class ServiceAccount {
    * @param requestBuilder Service account request builder
    */
   public async getBanksUserById(id: string): Promise<BanksUser> {
-    const banksUser: IBanksUser = await this.requestBuilder.request({
-      url: `/v1/banks-users/${id}`,
-      method: 'GET',
-    });
-
-    return new BanksUser(banksUser, this.requestBuilder);
+    return BanksUser.getBanksUserById(id, this.requestBuilder);
   }
 }

@@ -71,6 +71,21 @@ export class BanksUser {
   }
 
   /**
+   * Fetch a banksUser by ID
+   *
+   * @param id Id of the BanksUser to fetch
+   * @param requestBuilder Service account request builder
+   */
+  public static async getBanksUserById(id: string, requestBuilder: RequestBuilder): Promise<BanksUser> {
+    const banksUser: IBanksUser = await requestBuilder.request({
+      url: `/v1/banks-users/${id}`,
+      method: 'GET',
+    });
+
+    return new BanksUser(banksUser, requestBuilder);
+  }
+
+  /**
    * Update a banksUser
    * @param body Patch banks user request body
    */

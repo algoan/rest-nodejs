@@ -35,6 +35,22 @@ describe('Tests related to the BanksUser class', () => {
     nock.cleanAll();
   });
 
+  describe('static getBanksUserById()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1',
+        response: banksUserSample,
+        method: 'get',
+      });
+    });
+    it('should get the Banks User account', async () => {
+      const banksUser: BanksUser = await BanksUser.getBanksUserById('id1', requestBuilder);
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(banksUser).toBeInstanceOf(BanksUser);
+    });
+  });
+
   describe('update()', () => {
     beforeEach(() => {
       banksUserAPI = getFakeAlgoanServer({

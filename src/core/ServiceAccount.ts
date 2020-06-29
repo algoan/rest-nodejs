@@ -2,6 +2,7 @@ import { RequestBuilder } from '../RequestBuilder';
 import { IServiceAccount } from '..';
 import { PostSubscriptionDTO } from '../lib';
 import { Subscription } from './Subscription';
+import { BanksUser } from './BanksUser';
 
 /**
  * Service account class
@@ -105,11 +106,20 @@ export class ServiceAccount {
       }),
     );
   }
-
   /**
    * Get the service account authorization header
    */
   public async getAuthorizationHeader(): Promise<string> {
     return this.requestBuilder.getAuthorizationHeader();
+  }
+
+  /**
+   * Fetch a banksUser by ID
+   *
+   * @param id Id of the BanksUser to fetch
+   * @param requestBuilder Service account request builder
+   */
+  public async getBanksUserById(id: string): Promise<BanksUser> {
+    return BanksUser.getBanksUserById(id, this.requestBuilder);
   }
 }

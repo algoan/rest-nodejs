@@ -3,10 +3,12 @@ import * as nock from 'nock';
 import { RequestBuilder } from '../src/RequestBuilder';
 import { ServiceAccount } from '../src/core/ServiceAccount';
 import { Subscription } from '../src/core/Subscription';
+import { BanksUser } from '../src/core/BanksUser';
 import { EventName } from '../src';
 import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
 import { serviceAccounts as serviceAccountsSample } from './samples/service-accounts';
 import { subscriptions as subscriptionSample } from './samples/subscriptions';
+import { banksUser as banksUserSample } from './samples/banks-users';
 
 describe('Tests related to the ServiceAccount class', () => {
   const baseUrl: string = 'http://localhost:3000';
@@ -198,6 +200,41 @@ describe('Tests related to the ServiceAccount class', () => {
       const token: string = await serviceAccount.getAuthorizationHeader();
 
       expect(token).toEqual('Bearer fake_access_token');
+    });
+  });
+
+  describe('static getBanksUserById()', () => {
+    let banksUserAPI: nock.Scope;
+    beforeEach(() => {
+      getOAuthServer({
+        baseUrl,
+        isRefreshToken: false,
+        isUserPassword: false,
+        nbOfCalls: 1,
+        expiresIn: 500,
+        refreshExpiresIn: 2000,
+      });
+      requestBuilder = new RequestBuilder(baseUrl, {
+        clientId: 'a',
+        clientSecret: 's',
+      });
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1',
+        response: banksUserSample,
+        method: 'get',
+      });
+    });
+    it('should get the Banks User account', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+      const banksUser: BanksUser = await serviceAccount.getBanksUserById('id1');
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(banksUser).toBeInstanceOf(BanksUser);
     });
   });
 });

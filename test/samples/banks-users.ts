@@ -1,4 +1,12 @@
-import { IBanksUser, BanksUserAccount, BanksUserTransaction, MultiResourceCreationResponse } from '../../src/lib';
+import {
+  IBanksUser,
+  BanksUserAccount,
+  BanksUserTransaction,
+  MultiResourceCreationResponse,
+  AccountType,
+  UsageType,
+  BanksUserTransactionType,
+} from '../../src/lib';
 
 export const banksUser: IBanksUser = {
   id: 'id1',
@@ -23,8 +31,8 @@ export const banksUserAccount: BanksUserAccount = {
   balanceDate: '23/06/2020',
   connectionSource: 'mockConnectionSource',
   currency: 'EUR',
-  type: 'SAVINGS',
-  usage: 'PERSONAL',
+  type: AccountType.SAVINGS,
+  usage: UsageType.PERSONAL,
 };
 
 export const banksUserTransaction: BanksUserTransaction = {
@@ -33,7 +41,7 @@ export const banksUserTransaction: BanksUserTransaction = {
   category: 'mockCategory',
   date: '23/06/2020',
   description: 'mockDescription',
-  type: 'ATM',
+  type: BanksUserTransactionType.ATM,
 };
 
 export const banksUserTransactionResponse: MultiResourceCreationResponse<BanksUserTransaction> = {

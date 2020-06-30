@@ -120,7 +120,7 @@ export interface BanksUserAccount {
 /**
  * BanksUser Account with transactions
  */
-export interface BanksUserAccountWithTransactions extends Account {
+export interface BanksUserAccountWithTransactions extends BanksUserAccount {
   transactions: BanksUserTransaction[];
 }
 

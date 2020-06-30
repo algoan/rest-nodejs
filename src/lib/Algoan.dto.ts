@@ -1,5 +1,5 @@
-import { EventName, UsageType, AccountType, BanksUserTransactionType } from './Algoan.enum';
-import { SubscriptionStatus, BanksUserStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
+import { EventName, UsageType, AccountType, BanksUserTransactionType, BanksUserStatus } from './Algoan.enum';
+import { SubscriptionStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
 
 /**
  * POST /subscriptions DTO interface

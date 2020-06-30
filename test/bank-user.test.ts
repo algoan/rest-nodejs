@@ -2,6 +2,7 @@ import * as nock from 'nock';
 
 import { RequestBuilder } from '../src/RequestBuilder';
 import { BanksUser } from '../src/core/BanksUser';
+import { BanksUserStatus } from '../src/lib';
 import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
 import {
   banksUser as banksUserSample,
@@ -62,10 +63,10 @@ describe('Tests related to the BanksUser class', () => {
     });
     it('should update the BanksUser', async () => {
       const banksUser: BanksUser = new BanksUser(banksUserSample, requestBuilder);
-      banksUser.status = 'NEW';
+      banksUser.status = BanksUserStatus.NEW;
 
       await banksUser.update({
-        status: 'FINISHED',
+        status: BanksUserStatus.FINISHED,
       });
 
       expect(banksUserAPI.isDone()).toBeTruthy();

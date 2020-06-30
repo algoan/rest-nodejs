@@ -177,3 +177,13 @@ export enum BanksUserTransactionType {
   OTHER = 'OTHER',
   UNKNOWN = 'UNKNOWN',
 }
+
+/**
+ * BanksUser statuses
+ */
+export enum BanksUserStatus {
+  NEW = 'NEW',
+  SYNCHRONIZING = 'SYNCHRONIZING',
+  FINISHED = 'FINISHED',
+  ACCOUNTS_SYNCHRONIZED = 'ACCOUNTS_SYNCHRONIZED',
+}

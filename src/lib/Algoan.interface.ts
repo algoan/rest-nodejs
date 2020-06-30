@@ -1,4 +1,11 @@
-import { EventName, AnalysisAlerts, UsageType, AccountType, BanksUserTransactionType } from './Algoan.enum';
+import {
+  EventName,
+  AnalysisAlerts,
+  UsageType,
+  AccountType,
+  BanksUserTransactionType,
+  BanksUserStatus,
+} from './Algoan.enum';
 
 /**
  * Service account body
@@ -41,11 +48,6 @@ export interface IBanksUser {
   scores: Score[];
   analysis: Analysis;
 }
-
-/**
- * BanksUser statuses
- */
-export type BanksUserStatus = 'NEW' | 'SYNCHRONIZING' | 'FINISHED' | 'ACCOUNTS_SYNCHRONIZED';
 
 /**
  * List of plug-in linked to the aggregation process

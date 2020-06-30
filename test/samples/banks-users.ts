@@ -6,11 +6,12 @@ import {
   AccountType,
   UsageType,
   BanksUserTransactionType,
+  BanksUserStatus,
 } from '../../src/lib';
 
 export const banksUser: IBanksUser = {
   id: 'id1',
-  status: 'FINISHED',
+  status: BanksUserStatus.FINISHED,
   redirectUrl: 'mockRedirectUrl',
   redirectUrlCreatedAt: 1234567,
   redirectUrlTTL: 500,

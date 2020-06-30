@@ -92,12 +92,13 @@ export class Algoan {
     events: EventName[],
     secret?: string,
   ): PostSubscriptionDTO[] =>
-    events.map((event: EventName) => ({
-      status: 'ACTIVE',
-      target,
-      secret,
-      eventName: event,
-    }));
+    events.map(
+      (event: EventName): PostSubscriptionDTO => ({
+        target,
+        secret,
+        eventName: event,
+      }),
+    );
 }
 
 /**

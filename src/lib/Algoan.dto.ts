@@ -1,13 +1,5 @@
-import { EventName } from './Algoan.enum';
-import {
-  SubscriptionStatus,
-  BanksUserStatus,
-  PlugIn,
-  Score,
-  Analysis,
-  LoanDetails,
-  BanksUserTransactionType,
-} from './Algoan.interface';
+import { EventName, UsageType, AccountType, BanksUserTransactionType } from './Algoan.enum';
+import { SubscriptionStatus, BanksUserStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
 
 /**
  * POST /subscriptions DTO interface
@@ -49,8 +41,8 @@ export interface PostBanksUserAccountDTO {
   balanceDate: string;
   connectionSource: string;
   currency: string;
-  type: 'CHECKINGS' | 'SAVINGS' | 'LOAN' | 'CREDIT_CARD';
-  usage: 'PROFESSIONAL' | 'PERSONAL';
+  type: AccountType;
+  usage: UsageType;
   bank?: string;
   bic?: string;
   iban?: string;

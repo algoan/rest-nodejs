@@ -1,4 +1,4 @@
-import { EventName, AnalysisAlerts } from './Algoan.enum';
+import { EventName, AnalysisAlerts, UsageType, AccountType, BanksUserTransactionType } from './Algoan.enum';
 
 /**
  * Service account body
@@ -103,8 +103,8 @@ export interface BanksUserAccount {
   balanceDate: string;
   connectionSource: string;
   currency: string;
-  type: 'CHECKINGS' | 'SAVINGS' | 'LOAN' | 'CREDIT_CARD';
-  usage: 'PROFESSIONAL' | 'PERSONAL';
+  type: AccountType;
+  usage: UsageType;
   bank?: string;
   bic?: string;
   iban?: string;
@@ -113,6 +113,13 @@ export interface BanksUserAccount {
   reference?: string;
   savingsDetails?: string;
   status?: 'MANUAL' | 'ACTIVE' | 'ERROR' | 'NOT_FOUND' | 'CLOSED';
+}
+
+/**
+ * BanksUser Account with transactions
+ */
+export interface BanksUserAccountWithTransactions extends Account {
+  transactions: BanksUserTransaction[];
 }
 
 /**
@@ -155,30 +162,6 @@ export interface BanksUserTransaction {
   simplifiedDescription?: string;
   userDescription?: string;
 }
-
-/**
- * BanksUser Transaction type
- */
-export type BanksUserTransactionType =
-  | 'ATM'
-  | 'BANK_FEE'
-  | 'CASH'
-  | 'CHECK'
-  | 'CREDIT'
-  | 'CREDIT_CARD_PAYMENT'
-  | 'DEBIT'
-  | 'DEPOSIT'
-  | 'DIRECT_DEBIT'
-  | 'DIRECT_DEPOSIT'
-  | 'DIVIDEND'
-  | 'ELECTRONIC_PAYMENT'
-  | 'INTEREST'
-  | 'INTERNAL_TRANSFERT'
-  | 'POINT_OF_SALE'
-  | 'POTENTIAL_TRANSFER'
-  | 'REPEATING_PAYMENT'
-  | 'OTHER'
-  | 'UNKNOWN';
 
 /**
  * Multiple Resource Creation Response Scheme

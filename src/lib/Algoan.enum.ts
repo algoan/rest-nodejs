@@ -187,3 +187,18 @@ export enum BanksUserStatus {
   FINISHED = 'FINISHED',
   ACCOUNTS_SYNCHRONIZED = 'ACCOUNTS_SYNCHRONIZED',
 }
+
+/**
+ * Loan details account type
+ */
+export type LoanAccountType =
+  | 'AUTO'
+  | 'CONSUMER'
+  | 'CONSTRUCTION'
+  | 'MORTGAGE'
+  | 'OTHER'
+  | 'HOMEEQUITY'
+  | 'COMMERCIAL'
+  | 'STUDENT'
+  | 'MILITARY'
+  | 'SMB';

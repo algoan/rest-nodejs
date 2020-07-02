@@ -5,6 +5,7 @@ import {
   AccountType,
   BanksUserTransactionType,
   BanksUserStatus,
+  LoanAccountType,
 } from './Algoan.enum';
 
 /**
@@ -135,17 +136,7 @@ export interface LoanDetails {
   payment: number;
   remainingCapital: number;
   startDate: number;
-  type:
-    | 'AUTO'
-    | 'CONSUMER'
-    | 'CONSTRUCTION'
-    | 'MORTGAGE'
-    | 'OTHER'
-    | 'HOMEEQUITY'
-    | 'COMMERCIAL'
-    | 'STUDENT'
-    | 'MILITARY'
-    | 'SMB';
+  type: LoanAccountType;
 }
 
 /**
@@ -170,5 +161,5 @@ export interface BanksUserTransaction {
  */
 export interface MultiResourceCreationResponse<T> {
   elements: { resource: T; status: number }[];
-  metadata: { failure: number; sucess: number; total: number };
+  metadata: { failure: number; success: number; total: number };
 }

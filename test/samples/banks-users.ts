@@ -47,5 +47,5 @@ export const banksUserTransaction: BanksUserTransaction = {
 
 export const banksUserTransactionResponse: MultiResourceCreationResponse<BanksUserTransaction> = {
   elements: [{ resource: banksUserTransaction, status: 200 }],
-  metadata: { failure: 0, sucess: 1, total: 1 },
+  metadata: { failure: 0, success: 1, total: 1 },
 };

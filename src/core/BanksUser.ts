@@ -9,6 +9,7 @@ import {
   PostBanksUserTransactionDTO,
   MultiResourceCreationResponse,
   BanksUserTransaction,
+  BanksUserAccount,
 } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
@@ -111,10 +112,10 @@ export class BanksUser {
    * Creates accounts for the BankUser
    * @param body Array of BanksUser Accounts to Post
    */
-  public async createAccounts(body: PostBanksUserAccountDTO[]): Promise<PostBanksUserAccountDTO[]> {
-    const accounts: PostBanksUserAccountDTO[] = await Promise.all(
+  public async createAccounts(body: PostBanksUserAccountDTO[]): Promise<BanksUserAccount[]> {
+    const accounts: BanksUserAccount[] = await Promise.all(
       body.map(
-        async (banksUserAccount): Promise<PostBanksUserAccountDTO> =>
+        async (banksUserAccount: PostBanksUserAccountDTO): Promise<BanksUserAccount> =>
           this.requestBuilder.request({
             url: `/v1/banks-users/${this.id}/accounts`,
             method: 'POST',

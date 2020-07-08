@@ -126,7 +126,6 @@ export class BanksUser {
 
     return accounts;
   }
-  
 
   /**
    * Creates transactions for the given BankUser accounts

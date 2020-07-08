@@ -130,7 +130,7 @@ export interface BanksUserAccountWithTransactions extends BanksUserAccount {
  */
 export interface LoanDetails {
   amount: number;
-  debitedAccountId: string;
+  debitedAccountId?: string;
   endDate: number;
   interestRate: number;
   payment: number;

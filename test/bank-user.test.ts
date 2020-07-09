@@ -2,7 +2,7 @@ import * as nock from 'nock';
 
 import { RequestBuilder } from '../src/RequestBuilder';
 import { BanksUser } from '../src/core/BanksUser';
-import { BanksUserStatus } from '../src/lib';
+import { BanksUserStatus, BanksUserAccount, BanksUserTransaction } from '../src/lib';
 import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
 import {
   banksUser as banksUserSample,
@@ -49,6 +49,42 @@ describe('Tests related to the BanksUser class', () => {
       const banksUser: BanksUser = await BanksUser.getBanksUserById('id1', requestBuilder);
       expect(banksUserAPI.isDone()).toBeTruthy();
       expect(banksUser).toBeInstanceOf(BanksUser);
+    });
+  });
+
+  describe('static getAccounts()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1/accounts',
+        response: [banksUserAccountSample],
+        method: 'get',
+      });
+    });
+    it('should get the Banks User account', async () => {
+      const accounts: BanksUserAccount[] = await BanksUser.getAccounts('id1', requestBuilder);
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(accounts).toMatchObject([banksUserAccountSample]);
+    });
+  });
+
+  describe('static getTransactionsPerAccounts()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1/accounts/accountId1/transactions',
+        response: [banksUserTransactionSample],
+        method: 'get',
+      });
+    });
+    it('should get the Banks User account', async () => {
+      const transactions: BanksUserTransaction[] = await BanksUser.getTransactionsPerAccounts(
+        'id1',
+        'accountId1',
+        requestBuilder,
+      );
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(transactions).toMatchObject([banksUserTransactionSample]);
     });
   });
 

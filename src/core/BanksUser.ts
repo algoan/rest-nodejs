@@ -87,6 +87,45 @@ export class BanksUser {
   }
 
   /**
+   * Fetch all Accounts related to a BankUserID
+   *
+   * @param id Id of the BanksUser to fetch
+   * @param requestBuilder Service account request builder
+   *
+   * @returns Array of BanksUserAccount
+   */
+  public static async getAccountsByID(id: string, requestBuilder: RequestBuilder): Promise<BanksUserAccount[]> {
+    const accounts: BanksUserAccount[] = await requestBuilder.request({
+      url: `/v1/banks-users/${id}/accounts`,
+      method: 'GET',
+    });
+
+    return accounts;
+  }
+
+  /**
+   * Fetch all Transactions related to a BankUserID and an AccountID
+   *
+   * @param bankUserId Id of the BanksUser to fetch
+   * @param accountId Id of the Account to fetch
+   * @param requestBuilder Service account request builder
+   *
+   * @returns Array of BanksUserTransaction
+   */
+  public static async getTransactionsByIds(
+    bankUserId: string,
+    accountId: string,
+    requestBuilder: RequestBuilder,
+  ): Promise<BanksUserTransaction[]> {
+    const accounts: BanksUserTransaction[] = await requestBuilder.request({
+      url: `/v1/banks-users/${bankUserId}/accounts/${accountId}/transactions`,
+      method: 'GET',
+    });
+
+    return accounts;
+  }
+
+  /**
    * Update a banksUser
    * @param body Patch banks user request body
    */

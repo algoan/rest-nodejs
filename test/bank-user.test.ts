@@ -52,7 +52,7 @@ describe('Tests related to the BanksUser class', () => {
     });
   });
 
-  describe('static getAccountsByID()', () => {
+  describe('static getAccounts()', () => {
     beforeEach(() => {
       banksUserAPI = getFakeAlgoanServer({
         baseUrl,
@@ -62,13 +62,13 @@ describe('Tests related to the BanksUser class', () => {
       });
     });
     it('should get the Banks User account', async () => {
-      const accounts: BanksUserAccount[] = await BanksUser.getAccountsByID('id1', requestBuilder);
+      const accounts: BanksUserAccount[] = await BanksUser.getAccounts('id1', requestBuilder);
       expect(banksUserAPI.isDone()).toBeTruthy();
       expect(accounts).toMatchObject([banksUserAccountSample]);
     });
   });
 
-  describe('static getTransactionsByIds()', () => {
+  describe('static getTransactionsPerAccounts()', () => {
     beforeEach(() => {
       banksUserAPI = getFakeAlgoanServer({
         baseUrl,
@@ -78,7 +78,7 @@ describe('Tests related to the BanksUser class', () => {
       });
     });
     it('should get the Banks User account', async () => {
-      const transactions: BanksUserTransaction[] = await BanksUser.getTransactionsByIds(
+      const transactions: BanksUserTransaction[] = await BanksUser.getTransactionsPerAccounts(
         'id1',
         'accountId1',
         requestBuilder,

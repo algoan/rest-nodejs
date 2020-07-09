@@ -94,7 +94,7 @@ export class BanksUser {
    *
    * @returns Array of BanksUserAccount
    */
-  public static async getAccountsByID(id: string, requestBuilder: RequestBuilder): Promise<BanksUserAccount[]> {
+  public static async getAccounts(id: string, requestBuilder: RequestBuilder): Promise<BanksUserAccount[]> {
     const accounts: BanksUserAccount[] = await requestBuilder.request({
       url: `/v1/banks-users/${id}/accounts`,
       method: 'GET',
@@ -112,7 +112,7 @@ export class BanksUser {
    *
    * @returns Array of BanksUserTransaction
    */
-  public static async getTransactionsByIds(
+  public static async getTransactionsPerAccounts(
     bankUserId: string,
     accountId: string,
     requestBuilder: RequestBuilder,

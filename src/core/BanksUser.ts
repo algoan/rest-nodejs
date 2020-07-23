@@ -52,7 +52,7 @@ export class BanksUser {
   /**
    * Set of indicators representing the state of user banking and financial information
    */
-  public analysis: Analysis;
+  public analysis?: Analysis;
   /**
    * Request builder instance
    */

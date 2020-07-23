@@ -202,3 +202,22 @@ export type LoanAccountType =
   | 'STUDENT'
   | 'MILITARY'
   | 'SMB';
+
+/**
+ * ScoresTypes only value
+ */
+export type ScoresType = 'CREDIT';
+
+/**
+ * AnalysisReliability enum
+ */
+export enum AnalysisReliability {
+  HIGH = 'HIGH',
+  MEDIUM = 'MEDIUM',
+  LOW = 'LOW',
+}
+
+/**
+ * RegularCashFlow configurations
+ */
+export type RegularCashFlowConfiguration = 'A' | 'B' | 'C' | 'D';

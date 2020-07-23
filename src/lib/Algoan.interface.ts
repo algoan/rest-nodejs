@@ -6,6 +6,7 @@ import {
   BanksUserTransactionType,
   BanksUserStatus,
   LoanAccountType,
+  RegularCashFlowConfiguration,
 } from './Algoan.enum';
 
 /**
@@ -47,7 +48,7 @@ export interface IBanksUser {
   callbackUrl: string;
   plugIn?: PlugIn;
   scores: Score[];
-  analysis: Analysis;
+  analysis?: Analysis;
 }
 
 /**
@@ -72,11 +73,12 @@ export interface Score {
 
 /**
  * State of user banking and financial information
+ * alerts are not
  */
 export interface Analysis {
-  alerts: AnalysisAlerts[];
-  regularCashFlows: RegularCashFlow[];
-  reliability: ReliabilityStatus;
+  alerts?: AnalysisAlerts[];
+  regularCashFlows?: RegularCashFlow[];
+  reliability?: ReliabilityStatus;
 }
 
 /**
@@ -88,7 +90,7 @@ export interface RegularCashFlow {
     frequency: number;
     name: string;
   };
-  configuration: 'A' | 'B' | 'C' | 'D';
+  configuration: RegularCashFlowConfiguration;
   homogeneity: number;
 }
 

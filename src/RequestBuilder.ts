@@ -47,6 +47,7 @@ export class RequestBuilder {
         stringify({
           refresh_token: this.accessTokenInstance.refresh_token,
           grant_type: 'refresh_token',
+          client_id: this.credentials.clientId,
         }),
         {
           headers: {

@@ -24,6 +24,12 @@ export class ServiceAccount {
    * Service account date of creation
    */
   public createdAt: Date;
+
+  /**
+   * Additional properties for the serviceAccount configuration
+   */
+  public config?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
   /**
    * Subscriptions attached to the service account
    */

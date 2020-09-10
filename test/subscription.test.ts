@@ -148,7 +148,7 @@ describe('Tests related to the Subscription class', () => {
     const fakePayloadSent: {} = {
       banksUserId: 'id',
     };
-    const hash: string = createHmac('sha256', secret).update(JSON.stringify(fakePayloadSent)).digest('hex');
+    const hash: string = `sha256=${createHmac('sha256', secret).update(JSON.stringify(fakePayloadSent)).digest('hex')}`;
 
     beforeEach(() => {
       requestBuilder = new RequestBuilder(baseUrl, {

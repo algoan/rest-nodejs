@@ -92,6 +92,6 @@ export class Subscription {
 
     const expectedHash: string = createHmac('sha256', this.secret).update(JSON.stringify(payload)).digest('hex');
 
-    return expectedHash === signatureHeader;
+    return `sha256=${expectedHash}` === signatureHeader;
   }
 }

@@ -1,5 +1,6 @@
 import { EventName, UsageType, AccountType, BanksUserTransactionType, BanksUserStatus } from './Algoan.enum';
 import { SubscriptionStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
+import { ApplicationStatus, ExternalError } from './Application.interface';
 
 /**
  * POST /subscriptions DTO interface
@@ -67,4 +68,15 @@ export interface PostBanksUserTransactionDTO {
   reference?: string;
   simplifiedDescription?: string;
   userDescription?: string;
+}
+
+/**
+ * PATCH /applications/:id DTO interface
+ */
+export interface PatchApplicationDTO {
+  status?: ApplicationStatus;
+  partnerId?: string;
+  skipAggregation?: boolean;
+  skipGDPF?: boolean;
+  externalErrors?: ExternalError[];
 }

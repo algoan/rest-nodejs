@@ -9,6 +9,8 @@ import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
 import { serviceAccounts as serviceAccountsSample } from './samples/service-accounts';
 import { subscriptions as subscriptionSample } from './samples/subscriptions';
 import { banksUser as banksUserSample } from './samples/banks-users';
+import { applicationSample } from './samples/application';
+import { Application } from '../src/core/Application';
 
 describe('Tests related to the ServiceAccount class', () => {
   const baseUrl: string = 'http://localhost:3000';
@@ -235,6 +237,41 @@ describe('Tests related to the ServiceAccount class', () => {
       const banksUser: BanksUser = await serviceAccount.getBanksUserById('id1');
       expect(banksUserAPI.isDone()).toBeTruthy();
       expect(banksUser).toBeInstanceOf(BanksUser);
+    });
+  });
+
+  describe('static getApplicationById()', () => {
+    let applicationAPI: nock.Scope;
+    beforeEach(() => {
+      getOAuthServer({
+        baseUrl,
+        isRefreshToken: false,
+        isUserPassword: false,
+        nbOfCalls: 1,
+        expiresIn: 500,
+        refreshExpiresIn: 2000,
+      });
+      requestBuilder = new RequestBuilder(baseUrl, {
+        clientId: 'a',
+        clientSecret: 's',
+      });
+      applicationAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/applications/${applicationSample.id}`,
+        response: applicationSample,
+        method: 'get',
+      });
+    });
+    it('should get the Application', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+      const application: Application = await serviceAccount.getApplicationById(applicationSample.id);
+      expect(applicationAPI.isDone()).toBeTruthy();
+      expect(application).toBeInstanceOf(Application);
     });
   });
 });

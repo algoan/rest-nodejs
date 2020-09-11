@@ -3,6 +3,7 @@ import { IServiceAccount } from '..';
 import { PostSubscriptionDTO } from '../lib';
 import { Subscription } from './Subscription';
 import { BanksUser } from './BanksUser';
+import { Application } from './Application';
 
 /**
  * Service account class
@@ -123,9 +124,16 @@ export class ServiceAccount {
    * Fetch a banksUser by ID
    *
    * @param id Id of the BanksUser to fetch
-   * @param requestBuilder Service account request builder
    */
   public async getBanksUserById(id: string): Promise<BanksUser> {
     return BanksUser.getBanksUserById(id, this.requestBuilder);
+  }
+
+  /**
+   * Get an application by ID
+   * @param id Application identifier
+   */
+  public async getApplicationById(id: string): Promise<Application> {
+    return Application.getApplicationById(id, this.requestBuilder);
   }
 }

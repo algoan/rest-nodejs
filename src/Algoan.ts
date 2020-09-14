@@ -1,5 +1,5 @@
 import { RequestBuilder } from './RequestBuilder';
-import { PostSubscriptionDTO, EventName } from './lib';
+import { PostSubscriptionDTO, EventName, Logger } from './lib';
 import { ServiceAccount } from './core/ServiceAccount';
 import { Subscription } from './core';
 /**
@@ -21,12 +21,19 @@ export class Algoan {
 
   constructor(parameters: AlgoanOptions) {
     this.baseUrl = parameters.baseUrl;
-    this.requestBuilder = new RequestBuilder(this.baseUrl, {
-      clientId: parameters.clientId,
-      clientSecret: parameters.clientSecret,
-      username: parameters.username,
-      password: parameters.password,
-    });
+    this.requestBuilder = new RequestBuilder(
+      this.baseUrl,
+      {
+        clientId: parameters.clientId,
+        clientSecret: parameters.clientSecret,
+        username: parameters.username,
+        password: parameters.password,
+      },
+      {
+        logger: parameters.logger,
+        debug: parameters.debug,
+      },
+    );
     this.serviceAccounts = [];
   }
 
@@ -110,4 +117,6 @@ interface AlgoanOptions {
   baseUrl: string;
   username?: string;
   password?: string;
+  debug?: boolean;
+  logger?: Logger;
 }

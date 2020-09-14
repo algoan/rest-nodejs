@@ -55,6 +55,7 @@ export const getFakeAlgoanServer = (params: {
   path: string;
   response: Record<string, any>;
   nbOfCalls?: number;
+  status?: number;
 }): nock.Scope =>
   nock(params.baseUrl, {
     reqheaders: {
@@ -63,4 +64,4 @@ export const getFakeAlgoanServer = (params: {
   })
     [params.method](params.path)
     .times(params.nbOfCalls ?? 1)
-    .reply(200, params.response);
+    .reply(params.status ?? 200, params.response);

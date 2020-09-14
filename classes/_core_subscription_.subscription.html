@@ -106,6 +106,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_core_subscription_.subscription.html#update" class="tsd-kind-icon">update</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_core_subscription_.subscription.html#validatesignature" class="tsd-kind-icon">validate<wbr>Signature</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="_core_subscription_.subscription.html#create" class="tsd-kind-icon">create</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="_core_subscription_.subscription.html#get" class="tsd-kind-icon">get</a></li>
 							</ul>
@@ -125,7 +126,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L28">core/Subscription.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L30">core/Subscription.ts:30</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -150,7 +151,7 @@
 					<div class="tsd-signature tsd-kind-icon">event<wbr>Name<span class="tsd-signature-symbol">:</span> <a href="../enums/_lib_algoan_enum_.eventname.html" class="tsd-signature-type">EventName</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L19">core/Subscription.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L21">core/Subscription.ts:21</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -165,7 +166,7 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L11">core/Subscription.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L13">core/Subscription.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -180,7 +181,7 @@
 					<div class="tsd-signature tsd-kind-icon">secret<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L28">core/Subscription.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L30">core/Subscription.ts:30</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -196,7 +197,7 @@
 					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <a href="../modules/_lib_algoan_interface_.html#subscriptionstatus" class="tsd-signature-type">SubscriptionStatus</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L23">core/Subscription.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L25">core/Subscription.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -211,7 +212,7 @@
 					<div class="tsd-signature tsd-kind-icon">target<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L15">core/Subscription.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L17">core/Subscription.ts:17</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -233,7 +234,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L70">core/Subscription.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L72">core/Subscription.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -254,6 +255,49 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="validatesignature" class="tsd-anchor"></a>
+					<h3>validate<wbr>Signature</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Signature<span class="tsd-signature-symbol">(</span>signatureHeader<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L88">core/Subscription.ts:88</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Validates an Algoan Resthook with the &quot;x-hub-signature&quot; header
+									More information here: <a href="https://developers.algoan.com/public/docs/algoan_documentation/resthooks_and_events/resthooks.html#validating-resthook-events">https://developers.algoan.com/public/docs/algoan_documentation/resthooks_and_events/resthooks.html#validating-resthook-events</a></p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>signatureHeader: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Signature header received</p>
+									</div>
+								</li>
+								<li>
+									<h5>payload: <span class="tsd-signature-symbol">{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Payload sent</p>
+									</div>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-index-signature">
+											<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
 					<a name="create" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> create</h3>
@@ -264,7 +308,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L56">core/Subscription.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L58">core/Subscription.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -301,7 +345,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ccoeurderoy/algoan-sdk/blob/3256c06/src/core/Subscription.ts#L42">core/Subscription.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/algoan/rest-nodejs/blob/aa17b80/src/core/Subscription.ts#L44">core/Subscription.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -343,6 +387,12 @@
 						<a href="../modules/_requestbuilder_.html">&quot;<wbr>Request<wbr>Builder&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
+						<a href="../modules/_core_application_.html">&quot;core/<wbr>Application&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="../modules/_core_banksuser_.html">&quot;core/<wbr>Banks<wbr>User&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="../modules/_core_serviceaccount_.html">&quot;core/<wbr>Service<wbr>Account&quot;</a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
@@ -362,6 +412,9 @@
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="../modules/_lib_algoan_interface_.html">&quot;lib/<wbr>Algoan.interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="../modules/_lib_application_interface_.html">&quot;lib/<wbr>Application.interface&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="../modules/_lib_index_.html">&quot;lib/index&quot;</a>
@@ -395,6 +448,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_core_subscription_.subscription.html#update" class="tsd-kind-icon">update</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_core_subscription_.subscription.html#validatesignature" class="tsd-kind-icon">validate<wbr>Signature</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
 								<a href="_core_subscription_.subscription.html#create" class="tsd-kind-icon">create</a>

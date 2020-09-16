@@ -12,6 +12,12 @@ import { banksUser as banksUserSample } from './samples/banks-users';
 import { applicationSample } from './samples/application';
 import { Application } from '../src/core/Application';
 import { folderSample } from './samples/folder';
+import {
+  legalDocumentSample,
+  legalFileSample,
+  newLegalDocuments,
+  postLegalDocumentsResponse,
+} from './samples/legal-document';
 
 describe('Tests related to the ServiceAccount class', () => {
   const baseUrl: string = 'http://localhost:3000';
@@ -350,6 +356,57 @@ describe('Tests related to the ServiceAccount class', () => {
       });
       expect(signatureAPI.isDone()).toBeTruthy();
       expect(signature).toBeInstanceOf(Signature);
+    });
+  });
+
+  describe('createLegalDocuments()', () => {
+    let folderAPI: nock.Scope;
+    beforeEach(() => {
+      folderAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/legal-documents`,
+        response: postLegalDocumentsResponse,
+        method: 'post',
+      });
+    });
+    it('should create legal documents', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+      await serviceAccount.createLegalDocuments(folderSample.id, newLegalDocuments);
+
+      expect(folderAPI.isDone()).toBeTruthy();
+    });
+  });
+
+  describe('getLegalFileById()', () => {
+    let folderAPI: nock.Scope;
+    beforeEach(() => {
+      folderAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/legal-documents/${legalDocumentSample.id}/files/${legalFileSample.id}`,
+        response: postLegalDocumentsResponse,
+        method: 'get',
+      });
+    });
+    it('should fetch the specified file', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+
+      await serviceAccount.getLegalFileById({
+        folderId: folderSample.id,
+        legalDocumentId: legalDocumentSample.id,
+        fileId: legalFileSample.id,
+      });
+
+      expect(folderAPI.isDone()).toBeTruthy();
     });
   });
 });

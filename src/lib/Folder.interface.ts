@@ -362,17 +362,27 @@ export enum LegalDocumentCategory {
  * Signature
  */
 export interface ISignature {
-  callbackUrl: string;
+  callbackUrl?: string;
   createdAt: Date;
   holder: Holder;
   id: string;
   legalDocumentIds: string[];
-  metadata: unknown;
+  metadata?: unknown;
   partnerId: string;
-  redirectUrl: string;
-  redirectUrlCreatedAt: Date;
-  redirectUrlTTL: number;
+  redirectUrl?: string;
+  redirectUrlCreatedAt?: Date;
+  redirectUrlTTL?: number;
   state: SignatureState;
+  plugIn?: ESPlugIn;
+}
+
+/**
+ * Electronic signature available Plug-In
+ */
+export interface ESPlugIn {
+  yousign: {
+    baseUrl: string;
+  };
 }
 
 /**

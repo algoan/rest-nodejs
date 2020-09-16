@@ -1,8 +1,7 @@
-import { IFolder, FolderState, PostLegalDocumentDTO, MultiResourceCreationResponse, LegalFile } from '../lib';
+import { IFolder, ISignature, FolderState, PostLegalDocumentDTO, MultiResourceCreationResponse, LegalFile } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 import { LegalDocument } from './LegalDocument';
 import { SupportingDocument } from './SupportingDocument';
-import { Signature } from './Signature';
 
 /**
  * Folder instance
@@ -36,7 +35,7 @@ export class Folder implements IFolder {
 
   public legalDocuments: LegalDocument[];
 
-  public signatures: Signature[];
+  public signatures: ISignature[];
 
   /**
    * Define the global folder status
@@ -51,7 +50,7 @@ export class Folder implements IFolder {
     this.expiredAt = params.expiredAt;
     this.updatedAt = params.updatedAt;
     this.lastFileUploadedAt = params.lastFileUploadedAt;
-    this.signatures = params.signatures;
+    this.signatures = params.signatures ?? [];
     this.state = params.state;
     this.legalDocuments = params.legalDocuments.map((doc) => new LegalDocument(doc, this.id, requestBuilder));
     this.supportingDocuments = params.supportingDocuments.map((doc) => new SupportingDocument(doc, this.id));

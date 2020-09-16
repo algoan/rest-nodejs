@@ -31,8 +31,8 @@ export class SupportingDocument extends Document implements ISupportingDocument 
 
   public readonly apiPath: string;
 
-  constructor(params: ISupportingDocument) {
-    super(params);
+  constructor(params: ISupportingDocument, folderId: string) {
+    super(params, folderId);
     this.apiPath = 'supporting-documents';
     this.category = params.category;
     this.validFileTypes = params.validFileTypes;

@@ -1,4 +1,5 @@
-import { IFolder, FolderState } from '../lib';
+import { IFolder, FolderState, PostLegalDocumentDTO, MultiResourceCreationResponse, LegalFile } from '../lib';
+import { RequestBuilder } from '../RequestBuilder';
 import { LegalDocument } from './LegalDocument';
 import { SupportingDocument } from './SupportingDocument';
 import { Signature } from './Signature';
@@ -44,7 +45,7 @@ export class Folder implements IFolder {
 
   public supportingDocuments: SupportingDocument[];
 
-  constructor(params: IFolder) {
+  constructor(params: IFolder, private readonly requestBuilder: RequestBuilder) {
     this.id = params.id;
     this.createdAt = params.createdAt;
     this.expiredAt = params.expiredAt;
@@ -52,7 +53,28 @@ export class Folder implements IFolder {
     this.lastFileUploadedAt = params.lastFileUploadedAt;
     this.signatures = params.signatures;
     this.state = params.state;
-    this.legalDocuments = params.legalDocuments.map((doc) => new LegalDocument(doc));
-    this.supportingDocuments = params.supportingDocuments.map((doc) => new SupportingDocument(doc));
+    this.legalDocuments = params.legalDocuments.map((doc) => new LegalDocument(doc, this.id, requestBuilder));
+    this.supportingDocuments = params.supportingDocuments.map((doc) => new SupportingDocument(doc, this.id));
+  }
+
+  /**
+   * Push a new legal documents in the folder's list of documents.
+   * @param documents the new documents
+   */
+  public async createLegalDocuments(
+    documents: PostLegalDocumentDTO[],
+  ): Promise<MultiResourceCreationResponse<LegalDocument>> {
+    const response = await LegalDocument.createLegalDocuments(this.requestBuilder, this.id, documents);
+    this.legalDocuments.push(...response.elements.map((element) => element.resource));
+
+    return response;
+  }
+
+  /**
+   * Get one legal file from the current folder.
+   * @param params the path parameters of the request
+   */
+  public async getLegalFileById(params: { legalDocumentId: string; fileId: string }): Promise<LegalFile> {
+    return LegalDocument.getFileById(this.requestBuilder, { folderId: this.id, ...params });
   }
 }

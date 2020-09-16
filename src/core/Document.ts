@@ -85,12 +85,7 @@ export abstract class Document implements IDocument {
    */
   public updatedAt: Date;
 
-  /**
-   * The specific URL segment used to make server request
-   */
-  abstract readonly apiPath: string;
-
-  constructor(params: IDocument) {
+  constructor(params: IDocument, readonly folderId: string) {
     this.callbackUrl = params.callbackUrl;
     this.createdAt = params.createdAt;
     this.holder = params.holder;

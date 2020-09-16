@@ -1,6 +1,14 @@
 import { EventName, UsageType, AccountType, BanksUserTransactionType, BanksUserStatus } from './Algoan.enum';
 import { SubscriptionStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
 import { ApplicationStatus, ExternalError } from './Application.interface';
+import {
+  DocumentPeriod,
+  FileState,
+  Holder,
+  LegalDocumentCategory,
+  LegalFileType,
+  RejectionCode,
+} from './Folder.interface';
 
 /**
  * POST /subscriptions DTO interface
@@ -79,4 +87,29 @@ export interface PatchApplicationDTO {
   skipAggregation?: boolean;
   skipGDPF?: boolean;
   externalErrors?: ExternalError[];
+}
+
+/**
+ * POST /folders/:id/legal-documents DTO interface
+ */
+export interface PostLegalDocumentDTO {
+  category: LegalDocumentCategory;
+  holder: Holder;
+  required: boolean;
+  partnerId: string;
+  period: DocumentPeriod;
+  redirectUrl: string;
+  redirectUrlTTL: number;
+  rejectionCode: RejectionCode;
+  validFileTypes: LegalFileType[];
+}
+
+/**
+ * POST /folders/:id/legal-documents/:id/files DTO interface
+ */
+export interface PostLegalFileDTO {
+  file: string;
+  rejectionCode: number;
+  state: FileState;
+  type: LegalFileType;
 }

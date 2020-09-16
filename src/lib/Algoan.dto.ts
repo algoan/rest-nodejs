@@ -9,7 +9,7 @@ import {
   LegalDocumentCategory,
   LegalFileType,
   RejectionCode,
-  SignatureState
+  SignatureState,
 } from './Folder.interface';
 
 /**

@@ -54,7 +54,10 @@ export class LegalDocument extends Document implements ILegalDocument {
 
     return {
       ...res,
-      elements: res.elements.map((element) => ({ ...element, resource: new LegalDocument(element.resource, folderId, requestBuilder) })),
+      elements: res.elements.map((element) => ({
+        ...element,
+        resource: new LegalDocument(element.resource, folderId, requestBuilder),
+      })),
     };
   }
 

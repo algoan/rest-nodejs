@@ -62,6 +62,30 @@ describe('Tests related to the Application class', () => {
     });
   });
 
+  describe('static getById()', () => {
+    beforeEach(() => {
+      signatureAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/signatures/${folderSample.signatures[0].id}`,
+        response: folderSample.signatures[0],
+        method: 'get',
+      });
+    });
+    it('should get a signature', async () => {
+      const signature: ISignature = await Signature.getById(requestBuilder, {
+        folderId: folderSample.id,
+        signatureId: folderSample.signatures[0].id,
+      });
+      expect(signatureAPI.isDone()).toBeTruthy();
+      expect(signature).toBeInstanceOf(Signature);
+      expect(signature.id).toEqual(folderSample.signatures[0].id);
+      expect(signature.legalDocumentIds).toEqual(folderSample.signatures[0].legalDocumentIds);
+      expect(signature.partnerId).toEqual(folderSample.signatures[0].partnerId);
+      expect(signature.holder).toEqual(folderSample.signatures[0].holder);
+      expect(signature.createdAt).toEqual(folderSample.signatures[0].createdAt);
+    });
+  });
+
   describe('update()', () => {
     beforeEach(() => {
       signatureAPI = getFakeAlgoanServer({

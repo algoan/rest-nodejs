@@ -314,4 +314,42 @@ describe('Tests related to the ServiceAccount class', () => {
       expect(signature).toBeInstanceOf(Signature);
     });
   });
+
+  describe('static getSignatureById()', () => {
+    let signatureAPI: nock.Scope;
+    beforeEach(() => {
+      getOAuthServer({
+        baseUrl,
+        isRefreshToken: false,
+        isUserPassword: false,
+        nbOfCalls: 1,
+        expiresIn: 500,
+        refreshExpiresIn: 2000,
+      });
+      requestBuilder = new RequestBuilder(baseUrl, {
+        clientId: 'a',
+        clientSecret: 's',
+      });
+      signatureAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/signatures/${folderSample.signatures[0].id}`,
+        response: folderSample.signatures[0],
+        method: 'get',
+      });
+    });
+    it('should get a Signature', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+      const signature: Signature = await serviceAccount.getSignatureById({
+        folderId: folderSample.id,
+        signatureId: folderSample.signatures[0].id,
+      });
+      expect(signatureAPI.isDone()).toBeTruthy();
+      expect(signature).toBeInstanceOf(Signature);
+    });
+  });
 });

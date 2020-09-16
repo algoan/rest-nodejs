@@ -103,6 +103,23 @@ export class Signature implements ISignature {
   }
 
   /**
+   * Get a signature instance from a folder by id
+   * @param folderId Unique folder identifier
+   * @param signatureId Unique signature identifier
+   */
+  public static async getById(
+    requestBuilder: RequestBuilder,
+    params: { folderId: string; signatureId: string },
+  ): Promise<Signature> {
+    const signature: ISignature = await requestBuilder.request({
+      url: `/v1/folders/${params.folderId}/signatures/${params.signatureId}`,
+      method: 'GET',
+    });
+
+    return new Signature(params.folderId, signature, requestBuilder);
+  }
+
+  /**
    * Update a signature instance
    * @param body Request body
    * See more info here: https://developers.algoan.com/api/#operation/updateSignatureDocument

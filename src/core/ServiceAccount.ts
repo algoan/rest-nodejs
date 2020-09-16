@@ -139,6 +139,17 @@ export class ServiceAccount {
   }
 
   /**
+   * Get a signature by ID
+   * @param id Application identifier
+   */
+  public async getSignatureById(params: { folderId: string; signatureId: string }): Promise<Signature> {
+    return Signature.getById(this.requestBuilder, {
+      folderId: params.folderId,
+      signatureId: params.signatureId,
+    });
+  }
+
+  /**
    * Create a signature from a given folder id
    * @param folderId Unique folder identifier
    * @param signatureBody Signature instance to create

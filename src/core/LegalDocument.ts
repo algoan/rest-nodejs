@@ -101,6 +101,7 @@ export class LegalDocument extends Document implements ILegalDocument {
 
     const filePayload = await getFilePayload();
     const file = await this.requestBuilder.request<LegalFile>({
+      headers: filePayload ? { 'Content-Type': 'multipart/form-data' } : undefined,
       url: `/v1/folders/${this.folderId}/legal-documents/${this.id}/files`,
       method: 'POST',
       data: { ...body, file: filePayload },

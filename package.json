@@ -1,6 +1,6 @@
 {
   "name": "@algoan/rest",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "description": "Algoan APIs SDK for NodeJS",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",

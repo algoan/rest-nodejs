@@ -2,7 +2,7 @@ import * as nock from 'nock';
 
 import { RequestBuilder } from '../src/RequestBuilder';
 import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
-import { folderSample } from './samples/folder';
+import { folderSample, folderSampleWithLastFileUploadedAt } from './samples/folder';
 import { Folder } from '../src';
 import {
   legalDocumentSample,
@@ -37,6 +37,14 @@ describe('Tests related to the LegalDocument class', () => {
   afterEach(() => {
     jest.clearAllMocks();
     nock.cleanAll();
+  });
+
+  describe('constructor', () => {
+    it('should set to undefined the lastFileUploadedAt', async () => {
+      const folder = new Folder(folderSampleWithLastFileUploadedAt, requestBuilder);
+
+      expect(folder.lastFileUploadedAt).toBeInstanceOf(Date);
+    });
   });
 
   describe('createLegalDocuments()', () => {

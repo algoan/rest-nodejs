@@ -21,3 +21,8 @@ export const folderSample: IFolder = {
     },
   ],
 };
+
+export const folderSampleWithLastFileUploadedAt: IFolder = {
+  ...folderSample,
+  lastFileUploadedAt: new Date('2020-10-16T08:58:39.472+0000'),
+};

@@ -1,3 +1,4 @@
+import { ReadStream } from 'fs';
 import {
   IDocument,
   Holder,
@@ -101,5 +102,21 @@ export abstract class Document implements IDocument {
     this.required = params.required;
     this.state = params.state;
     this.updatedAt = new Date(params.updatedAt);
+  }
+
+  /**
+   * Returns a promise containing the form data corresponding to the specified
+   * readstream.
+   *
+   * @param readStream the readstream to transform
+   */
+  protected async getFilePayload(readStream: ReadStream): Promise<FormData> {
+    return new Promise((resolve) => {
+      readStream.on('end', async () => {
+        const formData = new FormData();
+        formData.append(this.id, (readStream as unknown) as Blob);
+        resolve(formData);
+      });
+    });
   }
 }

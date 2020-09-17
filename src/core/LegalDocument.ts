@@ -84,22 +84,7 @@ export class LegalDocument extends Document implements ILegalDocument {
    * @param body the content of the file to upload
    */
   public async uploadFile(body: PostLegalFileDTO): Promise<LegalFile> {
-    const getFilePayload = async (): Promise<FormData | undefined> => {
-      const readStream = body.file;
-      if (readStream === undefined) {
-        return undefined;
-      }
-
-      return new Promise((resolve) => {
-        readStream.on('end', async () => {
-          const formData = new FormData();
-          formData.append(this.id, (readStream as unknown) as Blob);
-          resolve(formData);
-        });
-      });
-    };
-
-    const filePayload = await getFilePayload();
+    const filePayload = body.file ? await this.getFilePayload(body.file) : undefined;
     const file = await this.requestBuilder.request<LegalFile>({
       headers: filePayload ? { 'Content-Type': 'multipart/form-data' } : undefined,
       url: `/v1/folders/${this.folderId}/legal-documents/${this.id}/files`,

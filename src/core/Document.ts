@@ -1,4 +1,6 @@
 import { ReadStream } from 'fs';
+// eslint-disable-next-line  @typescript-eslint/no-require-imports
+import FormData = require('form-data');
 import {
   IDocument,
   Holder,

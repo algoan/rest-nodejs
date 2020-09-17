@@ -1,9 +1,10 @@
 import { RequestBuilder } from '../RequestBuilder';
 import { IServiceAccount } from '..';
-import { PostSubscriptionDTO } from '../lib';
+import { PostSignatureDTO, PostSubscriptionDTO } from '../lib';
 import { Subscription } from './Subscription';
 import { BanksUser } from './BanksUser';
 import { Application } from './Application';
+import { Signature } from './Signature';
 
 /**
  * Service account class
@@ -135,5 +136,25 @@ export class ServiceAccount {
    */
   public async getApplicationById(id: string): Promise<Application> {
     return Application.getApplicationById(id, this.requestBuilder);
+  }
+
+  /**
+   * Get a signature by ID
+   * @param id Application identifier
+   */
+  public async getSignatureById(params: { folderId: string; signatureId: string }): Promise<Signature> {
+    return Signature.getById(this.requestBuilder, {
+      folderId: params.folderId,
+      signatureId: params.signatureId,
+    });
+  }
+
+  /**
+   * Create a signature from a given folder id
+   * @param folderId Unique folder identifier
+   * @param signatureBody Signature instance to create
+   */
+  public async createSignature(folderId: string, signatureBody: PostSignatureDTO): Promise<Signature> {
+    return Signature.create(this.requestBuilder, folderId, signatureBody);
   }
 }

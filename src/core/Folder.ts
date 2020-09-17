@@ -2,7 +2,7 @@ import { IFolder, FolderState, PostLegalDocumentDTO, MultiResourceCreationRespon
 import { RequestBuilder } from '../RequestBuilder';
 import { LegalDocument } from './LegalDocument';
 import { SupportingDocument } from './SupportingDocument';
-import { Signature } from './Signature';
+import { Signature } from '.';
 
 /**
  * Folder instance
@@ -36,6 +36,9 @@ export class Folder implements IFolder {
 
   public legalDocuments: LegalDocument[];
 
+  /**
+   * Signature instances attached to the folder
+   */
   public signatures: Signature[];
 
   /**
@@ -51,7 +54,7 @@ export class Folder implements IFolder {
     this.expiredAt = params.expiredAt;
     this.updatedAt = params.updatedAt;
     this.lastFileUploadedAt = params.lastFileUploadedAt;
-    this.signatures = params.signatures;
+    this.signatures = params.signatures?.map((signature) => new Signature(this.id, signature, requestBuilder)) ?? [];
     this.state = params.state;
     this.legalDocuments = params.legalDocuments.map((doc) => new LegalDocument(doc, this.id, requestBuilder));
     this.supportingDocuments = params.supportingDocuments.map((doc) => new SupportingDocument(doc, this.id));

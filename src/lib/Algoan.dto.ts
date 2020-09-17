@@ -3,11 +3,13 @@ import { SubscriptionStatus, PlugIn, Score, Analysis, LoanDetails } from './Algo
 import { ApplicationStatus, ExternalError } from './Application.interface';
 import {
   DocumentPeriod,
+  ESPlugIn,
   FileState,
   Holder,
   LegalDocumentCategory,
   LegalFileType,
   RejectionCode,
+  SignatureState,
 } from './Folder.interface';
 
 /**
@@ -112,4 +114,29 @@ export interface PostLegalFileDTO {
   rejectionCode: number;
   state: FileState;
   type: LegalFileType;
+}
+
+/**
+ * POST /folders/:id/signatures DTO interface
+ */
+export interface PostSignatureDTO {
+  holder: Holder;
+  legalDocumentIds: string[];
+  partnerId: string;
+  redirectUrl?: string;
+  redirectUrlTTL?: number;
+  metadata?: { [key: string]: string | number | boolean };
+  plugIn?: ESPlugIn;
+  state?: SignatureState;
+}
+
+/**
+ * PATCH /folders/:id/signatures/:signatureId DTO interface
+ */
+export interface PatchSignatureDTO {
+  plugIn?: ESPlugIn;
+  state?: SignatureState;
+  redirectUrl?: string;
+  redirectUrlTTL?: number;
+  holder?: Holder;
 }

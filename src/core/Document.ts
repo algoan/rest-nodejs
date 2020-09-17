@@ -117,6 +117,8 @@ export abstract class Document implements IDocument {
         formData.append(this.id, (readStream as unknown) as Blob);
         resolve(formData);
       });
+
+      readStream.read();
     });
   }
 }

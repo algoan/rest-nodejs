@@ -1,6 +1,17 @@
+import { ReadStream } from 'fs';
 import { EventName, UsageType, AccountType, BanksUserTransactionType, BanksUserStatus } from './Algoan.enum';
 import { SubscriptionStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
 import { ApplicationStatus, ExternalError } from './Application.interface';
+import {
+  DocumentPeriod,
+  ESPlugIn,
+  FileState,
+  Holder,
+  LegalDocumentCategory,
+  LegalFileType,
+  RejectionCode,
+  SignatureState,
+} from './Folder.interface';
 
 /**
  * POST /subscriptions DTO interface
@@ -79,4 +90,54 @@ export interface PatchApplicationDTO {
   skipAggregation?: boolean;
   skipGDPF?: boolean;
   externalErrors?: ExternalError[];
+}
+
+/**
+ * POST /folders/:id/legal-documents DTO interface
+ */
+export interface PostLegalDocumentDTO {
+  category: LegalDocumentCategory;
+  holder: Holder;
+  required: boolean;
+  partnerId?: string;
+  period?: DocumentPeriod;
+  redirectUrl?: string;
+  redirectUrlTTL?: number;
+  rejectionCode?: RejectionCode;
+  validFileTypes?: LegalFileType[];
+}
+
+/**
+ * POST /folders/:id/legal-documents/:id/files DTO interface
+ */
+export interface PostLegalFileDTO {
+  file?: ReadStream;
+  rejectionCode?: number;
+  state?: FileState;
+  type?: LegalFileType;
+}
+
+/**
+ * POST /folders/:id/signatures DTO interface
+ */
+export interface PostSignatureDTO {
+  holder: Holder;
+  legalDocumentIds: string[];
+  partnerId: string;
+  redirectUrl?: string;
+  redirectUrlTTL?: number;
+  metadata?: { [key: string]: string | number | boolean };
+  plugIn?: ESPlugIn;
+  state?: SignatureState;
+}
+
+/**
+ * PATCH /folders/:id/signatures/:signatureId DTO interface
+ */
+export interface PatchSignatureDTO {
+  plugIn?: ESPlugIn;
+  state?: SignatureState;
+  redirectUrl?: string;
+  redirectUrlTTL?: number;
+  holder?: Holder;
 }

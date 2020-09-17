@@ -4,13 +4,20 @@ import { RequestBuilder } from '../src/RequestBuilder';
 import { ServiceAccount } from '../src/core/ServiceAccount';
 import { Subscription } from '../src/core/Subscription';
 import { BanksUser } from '../src/core/BanksUser';
-import { EventName } from '../src';
+import { EventName, Holder, Signature } from '../src';
 import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
 import { serviceAccounts as serviceAccountsSample } from './samples/service-accounts';
 import { subscriptions as subscriptionSample } from './samples/subscriptions';
 import { banksUser as banksUserSample } from './samples/banks-users';
 import { applicationSample } from './samples/application';
 import { Application } from '../src/core/Application';
+import { folderSample } from './samples/folder';
+import {
+  legalDocumentSample,
+  legalFileSample,
+  newLegalDocuments,
+  postLegalDocumentsResponse,
+} from './samples/legal-document';
 
 describe('Tests related to the ServiceAccount class', () => {
   const baseUrl: string = 'http://localhost:3000';
@@ -272,6 +279,134 @@ describe('Tests related to the ServiceAccount class', () => {
       const application: Application = await serviceAccount.getApplicationById(applicationSample.id);
       expect(applicationAPI.isDone()).toBeTruthy();
       expect(application).toBeInstanceOf(Application);
+    });
+  });
+
+  describe('static createSignature()', () => {
+    let signatureAPI: nock.Scope;
+    beforeEach(() => {
+      getOAuthServer({
+        baseUrl,
+        isRefreshToken: false,
+        isUserPassword: false,
+        nbOfCalls: 1,
+        expiresIn: 500,
+        refreshExpiresIn: 2000,
+      });
+      requestBuilder = new RequestBuilder(baseUrl, {
+        clientId: 'a',
+        clientSecret: 's',
+      });
+      signatureAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/signatures`,
+        response: folderSample.signatures[0],
+        method: 'post',
+      });
+    });
+    it('should create a new Signature', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+      const signature: Signature = await serviceAccount.createSignature(folderSample.id, {
+        partnerId: 'provider_id',
+        legalDocumentIds: ['doc_id'],
+        holder: Holder.APPLICANT,
+      });
+      expect(signatureAPI.isDone()).toBeTruthy();
+      expect(signature).toBeInstanceOf(Signature);
+    });
+  });
+
+  describe('static getSignatureById()', () => {
+    let signatureAPI: nock.Scope;
+    beforeEach(() => {
+      getOAuthServer({
+        baseUrl,
+        isRefreshToken: false,
+        isUserPassword: false,
+        nbOfCalls: 1,
+        expiresIn: 500,
+        refreshExpiresIn: 2000,
+      });
+      requestBuilder = new RequestBuilder(baseUrl, {
+        clientId: 'a',
+        clientSecret: 's',
+      });
+      signatureAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/signatures/${folderSample.signatures[0].id}`,
+        response: folderSample.signatures[0],
+        method: 'get',
+      });
+    });
+    it('should get a Signature', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+      const signature: Signature = await serviceAccount.getSignatureById({
+        folderId: folderSample.id,
+        signatureId: folderSample.signatures[0].id,
+      });
+      expect(signatureAPI.isDone()).toBeTruthy();
+      expect(signature).toBeInstanceOf(Signature);
+    });
+  });
+
+  describe('createLegalDocuments()', () => {
+    let folderAPI: nock.Scope;
+    beforeEach(() => {
+      folderAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/legal-documents`,
+        response: postLegalDocumentsResponse,
+        method: 'post',
+      });
+    });
+    it('should create legal documents', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+      await serviceAccount.createLegalDocuments(folderSample.id, newLegalDocuments);
+
+      expect(folderAPI.isDone()).toBeTruthy();
+    });
+  });
+
+  describe('getLegalFileById()', () => {
+    let folderAPI: nock.Scope;
+    beforeEach(() => {
+      folderAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/legal-documents/${legalDocumentSample.id}/files/${legalFileSample.id}`,
+        response: postLegalDocumentsResponse,
+        method: 'get',
+      });
+    });
+    it('should fetch the specified file', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+
+      await serviceAccount.getLegalFileById({
+        folderId: folderSample.id,
+        legalDocumentId: legalDocumentSample.id,
+        fileId: legalFileSample.id,
+      });
+
+      expect(folderAPI.isDone()).toBeTruthy();
     });
   });
 });

@@ -1,9 +1,17 @@
 import { RequestBuilder } from '../RequestBuilder';
 import { IServiceAccount } from '..';
-import { PostSubscriptionDTO } from '../lib';
+import {
+  PostSignatureDTO,
+  PostSubscriptionDTO,
+  LegalFile,
+  MultiResourceCreationResponse,
+  PostLegalDocumentDTO,
+} from '../lib';
 import { Subscription } from './Subscription';
 import { BanksUser } from './BanksUser';
 import { Application } from './Application';
+import { Signature } from './Signature';
+import { LegalDocument } from './LegalDocument';
 
 /**
  * Service account class
@@ -135,5 +143,48 @@ export class ServiceAccount {
    */
   public async getApplicationById(id: string): Promise<Application> {
     return Application.getApplicationById(id, this.requestBuilder);
+  }
+
+  /**
+   * Get a signature by ID
+   * @param id Application identifier
+   */
+  public async getSignatureById(params: { folderId: string; signatureId: string }): Promise<Signature> {
+    return Signature.getById(this.requestBuilder, {
+      folderId: params.folderId,
+      signatureId: params.signatureId,
+    });
+  }
+
+  /**
+   * Create a signature from a given folder id
+   * @param folderId Unique folder identifier
+   * @param signatureBody Signature instance to create
+   */
+  public async createSignature(folderId: string, signatureBody: PostSignatureDTO): Promise<Signature> {
+    return Signature.create(this.requestBuilder, folderId, signatureBody);
+  }
+  /**
+   * Push new legal documents in the folder's list of documents.
+   * @param folderId the id of the folder in which creation is done
+   * @param documents the new documents
+   */
+  public async createLegalDocuments(
+    folderId: string,
+    documents: PostLegalDocumentDTO[],
+  ): Promise<MultiResourceCreationResponse<LegalDocument>> {
+    return LegalDocument.create(this.requestBuilder, folderId, documents);
+  }
+
+  /**
+   * Get one legal file from the current folder.
+   * @param params the path parameters of the request
+   */
+  public async getLegalFileById(params: {
+    folderId: string;
+    legalDocumentId: string;
+    fileId: string;
+  }): Promise<LegalFile> {
+    return LegalDocument.getFileById(this.requestBuilder, params);
   }
 }

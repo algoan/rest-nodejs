@@ -14,7 +14,7 @@ export class Signature implements ISignature {
   /**
    * The date of creation of the signature
    */
-  public createdAt: Date;
+  public createdAt: number;
 
   /**
    * Signatory
@@ -50,7 +50,7 @@ export class Signature implements ISignature {
   /**
    * The date of creation of the redirectUrl
    */
-  public redirectUrlCreatedAt?: Date;
+  public redirectUrlCreatedAt?: number;
 
   /**
    * The max time of validity of the redirectUrl (in second)
@@ -70,7 +70,7 @@ export class Signature implements ISignature {
   constructor(folderId: string, params: ISignature, private readonly requestBuilder: RequestBuilder) {
     this.folderId = folderId;
     this.callbackUrl = params.callbackUrl;
-    this.createdAt = new Date(params.createdAt);
+    this.createdAt = params.createdAt;
     this.holder = params.holder;
     this.id = params.id;
     this.legalDocumentIds = params.legalDocumentIds;

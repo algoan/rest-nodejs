@@ -86,7 +86,9 @@ export class LegalDocument extends Document implements ILegalDocument {
   public async uploadFile(body: PostLegalFileDTO): Promise<LegalFile> {
     const getFilePayload = async (): Promise<FormData | undefined> => {
       const readStream = body.file;
-      if (readStream === undefined) {return undefined;}
+      if (readStream === undefined) {
+        return undefined;
+      }
 
       return new Promise((resolve) => {
         readStream.on('end', async () => {

@@ -28,7 +28,7 @@ export interface IDocument {
   period?: DocumentPeriod;
   properties?: DocumentProperties;
   redirectUrl?: string;
-  redirectUrlCreatedAt?: Date;
+  redirectUrlCreatedAt?: number;
   redirectUrlTTL: number;
   rejectionCode: RejectionCode;
   required: boolean;
@@ -363,14 +363,14 @@ export enum LegalDocumentCategory {
  */
 export interface ISignature {
   callbackUrl?: string;
-  createdAt: Date;
+  createdAt: number;
   holder: Holder;
   id: string;
   legalDocumentIds: string[];
   metadata?: unknown;
   partnerId: string;
   redirectUrl?: string;
-  redirectUrlCreatedAt?: Date;
+  redirectUrlCreatedAt?: number;
   redirectUrlTTL?: number;
   state: SignatureState;
   plugIn?: ESPlugIn;

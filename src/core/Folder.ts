@@ -50,10 +50,10 @@ export class Folder implements IFolder {
 
   constructor(params: IFolder, private readonly requestBuilder: RequestBuilder) {
     this.id = params.id;
-    this.createdAt = params.createdAt;
-    this.expiredAt = params.expiredAt;
-    this.updatedAt = params.updatedAt;
-    this.lastFileUploadedAt = params.lastFileUploadedAt;
+    this.createdAt = new Date(params.createdAt);
+    this.expiredAt = new Date(params.expiredAt);
+    this.updatedAt = new Date(params.updatedAt);
+    this.lastFileUploadedAt = params.lastFileUploadedAt ? new Date(params.lastFileUploadedAt) : undefined;
     this.signatures = params.signatures?.map((signature) => new Signature(this.id, signature, requestBuilder)) ?? [];
     this.state = params.state;
     this.legalDocuments = params.legalDocuments.map((doc) => new LegalDocument(doc, this.id, requestBuilder));

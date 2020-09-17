@@ -41,7 +41,7 @@ describe('Tests related to the Application class', () => {
           id: '5f3663fc3ec5884afc8ed04f',
           partnerId: 'SIGN_ID',
           holder: 'APPLICANT',
-          createdAt: '2020-08-14T10:14:20.224+0000',
+          createdAt: 1560675749902,
         },
         method: 'post',
       });
@@ -58,7 +58,7 @@ describe('Tests related to the Application class', () => {
       expect(signature.legalDocumentIds).toEqual(['random_legal_id']);
       expect(signature.partnerId).toEqual('SIGN_ID');
       expect(signature.holder).toEqual('APPLICANT');
-      expect(signature.createdAt).toEqual(new Date('2020-08-14T10:14:20.224+0000'));
+      expect(signature.createdAt).toEqual(1560675749902);
     });
   });
 

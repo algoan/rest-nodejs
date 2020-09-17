@@ -14,7 +14,7 @@ export const folderSample: IFolder = {
       id: 'sign_id',
       partnerId: 'partner_id',
       legalDocumentIds: ['docId'],
-      createdAt: new Date('2020-08-14T10:14:20.224+0000'),
+      createdAt: 1560675749902,
       state: 0,
       holder: Holder.APPLICANT,
     },

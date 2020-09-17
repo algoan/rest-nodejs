@@ -58,7 +58,7 @@ export abstract class Document implements IDocument {
   /**
    * The date of creation of the redirectUrl
    */
-  public redirectUrlCreatedAt?: Date;
+  public redirectUrlCreatedAt?: number;
 
   /**
    * The max time of validity of the redirectUrl (in second)
@@ -87,7 +87,7 @@ export abstract class Document implements IDocument {
 
   constructor(params: IDocument, readonly folderId: string) {
     this.callbackUrl = params.callbackUrl;
-    this.createdAt = params.createdAt;
+    this.createdAt = new Date(params.createdAt);
     this.holder = params.holder;
     this.id = params.id;
     this.internalComments = params.internalComments;
@@ -100,6 +100,6 @@ export abstract class Document implements IDocument {
     this.rejectionCode = params.rejectionCode;
     this.required = params.required;
     this.state = params.state;
-    this.updatedAt = params.updatedAt;
+    this.updatedAt = new Date(params.updatedAt);
   }
 }

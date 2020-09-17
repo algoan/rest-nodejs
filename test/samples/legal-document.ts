@@ -149,7 +149,6 @@ export const postLegalDocumentsResponse = (
 };
 
 export const fileToUpload: PostLegalFileDTO = {
-  file: 'content',
   rejectionCode: 23,
   state: FileState.IN_PROGRESS,
   type: LegalFileType.BANK_RECORDS,

@@ -1,5 +1,5 @@
 import { Holder, IFolder } from '../../src';
-import { legalDocumentSample } from './legal-document'
+import { legalDocumentSample } from './legal-document';
 
 export const folderSample: IFolder = {
   id: '5f61d3bf3b9e4d2ad7b4b251',

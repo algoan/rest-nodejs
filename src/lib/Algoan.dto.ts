@@ -1,3 +1,4 @@
+import { ReadStream } from 'fs';
 import { EventName, UsageType, AccountType, BanksUserTransactionType, BanksUserStatus } from './Algoan.enum';
 import { SubscriptionStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
 import { ApplicationStatus, ExternalError } from './Application.interface';
@@ -98,22 +99,22 @@ export interface PostLegalDocumentDTO {
   category: LegalDocumentCategory;
   holder: Holder;
   required: boolean;
-  partnerId: string;
-  period: DocumentPeriod;
-  redirectUrl: string;
-  redirectUrlTTL: number;
-  rejectionCode: RejectionCode;
-  validFileTypes: LegalFileType[];
+  partnerId?: string;
+  period?: DocumentPeriod;
+  redirectUrl?: string;
+  redirectUrlTTL?: number;
+  rejectionCode?: RejectionCode;
+  validFileTypes?: LegalFileType[];
 }
 
 /**
  * POST /folders/:id/legal-documents/:id/files DTO interface
  */
 export interface PostLegalFileDTO {
-  file: string;
-  rejectionCode: number;
-  state: FileState;
-  type: LegalFileType;
+  file?: ReadStream;
+  rejectionCode?: number;
+  state?: FileState;
+  type?: LegalFileType;
 }
 
 /**

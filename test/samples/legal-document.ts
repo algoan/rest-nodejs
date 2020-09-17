@@ -16,6 +16,7 @@ import {
   RejectionCode,
   RequestBuilder,
 } from '../../src';
+import { createReadStream } from 'fs';
 
 export const legalFileSample: LegalFile = {
   id: '5d1930e00000000000000000',
@@ -148,7 +149,14 @@ export const postLegalDocumentsResponse = (
   };
 };
 
-export const fileToUpload: PostLegalFileDTO = {
+export const fileToUploadWithoutMedia: PostLegalFileDTO = {
+  rejectionCode: 23,
+  state: FileState.IN_PROGRESS,
+  type: LegalFileType.BANK_RECORDS,
+};
+
+export const fileToUploadWithMedia: PostLegalFileDTO = {
+  file: createReadStream(__filename),
   rejectionCode: 23,
   state: FileState.IN_PROGRESS,
   type: LegalFileType.BANK_RECORDS,

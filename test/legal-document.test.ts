@@ -5,7 +5,8 @@ import { getFakeAlgoanServer, getOAuthServer } from './utils/fake-server.utils';
 import { folderSample } from './samples/folder';
 import { LegalDocument } from '../src';
 import {
-  fileToUpload,
+  fileToUploadWithMedia,
+  fileToUploadWithoutMedia,
   legalDocumentSample,
   legalFileSample,
   newLegalDocuments,
@@ -83,10 +84,19 @@ describe('Tests related to the LegalDocument class', () => {
       });
     });
 
-    it('should upload the given file', async () => {
+    it('should upload the given file if it does not contain file media', async () => {
       const legalDocument = new LegalDocument(legalDocumentSample, folderSample.id, requestBuilder);
       const nbOfFiles = legalDocument.files.length;
-      await legalDocument.uploadFile(fileToUpload);
+      await legalDocument.uploadFile(fileToUploadWithoutMedia);
+
+      expect(legalDocumentAPI.isDone()).toBeTruthy();
+      expect(legalDocument.files.length).toBe(nbOfFiles + 1);
+    });
+
+    it('should upload the given file if it contains file media', async () => {
+      const legalDocument = new LegalDocument(legalDocumentSample, folderSample.id, requestBuilder);
+      const nbOfFiles = legalDocument.files.length;
+      await legalDocument.uploadFile(fileToUploadWithMedia);
 
       expect(legalDocumentAPI.isDone()).toBeTruthy();
       expect(legalDocument.files.length).toBe(nbOfFiles + 1);

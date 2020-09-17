@@ -47,7 +47,7 @@ describe('Tests related to the LegalDocument class', () => {
       });
     });
     it('should create legal documents', async () => {
-      await LegalDocument.createLegalDocuments(requestBuilder, folderSample.id, newLegalDocuments);
+      await LegalDocument.create(requestBuilder, folderSample.id, newLegalDocuments);
 
       expect(legalDocumentAPI.isDone()).toBeTruthy();
     });

@@ -41,7 +41,7 @@ export class LegalDocument extends Document implements ILegalDocument {
    * @param folderId the id of the folder in which documents are created
    * @param body the legal documents to add
    */
-  public static async createLegalDocuments(
+  public static async create(
     requestBuilder: RequestBuilder,
     folderId: string,
     body: PostLegalDocumentDTO[],

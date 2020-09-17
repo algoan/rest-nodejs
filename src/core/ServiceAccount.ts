@@ -173,7 +173,7 @@ export class ServiceAccount {
     folderId: string,
     documents: PostLegalDocumentDTO[],
   ): Promise<MultiResourceCreationResponse<LegalDocument>> {
-    return LegalDocument.createLegalDocuments(this.requestBuilder, folderId, documents);
+    return LegalDocument.create(this.requestBuilder, folderId, documents);
   }
 
   /**

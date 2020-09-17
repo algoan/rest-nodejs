@@ -67,7 +67,7 @@ export class Folder implements IFolder {
   public async createLegalDocuments(
     documents: PostLegalDocumentDTO[],
   ): Promise<MultiResourceCreationResponse<LegalDocument>> {
-    const response = await LegalDocument.createLegalDocuments(this.requestBuilder, this.id, documents);
+    const response = await LegalDocument.create(this.requestBuilder, this.id, documents);
     this.legalDocuments.push(...response.elements.map((element) => element.resource));
 
     return response;

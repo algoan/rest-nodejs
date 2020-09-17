@@ -54,7 +54,7 @@ export class Folder implements IFolder {
     this.expiredAt = new Date(params.expiredAt);
     this.updatedAt = new Date(params.updatedAt);
     this.lastFileUploadedAt = params.lastFileUploadedAt ? new Date(params.lastFileUploadedAt) : undefined;
-    this.signatures = params.signatures?.map((signature) => new Signature(this.id, signature, requestBuilder)) ?? [];
+    this.signatures = params.signatures.map((signature) => new Signature(this.id, signature, requestBuilder));
     this.state = params.state;
     this.legalDocuments = params.legalDocuments.map((doc) => new LegalDocument(doc, this.id, requestBuilder));
     this.supportingDocuments = params.supportingDocuments.map((doc) => new SupportingDocument(doc, this.id));

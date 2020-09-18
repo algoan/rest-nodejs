@@ -415,4 +415,31 @@ describe('Tests related to the ServiceAccount class', () => {
       expect(folderAPI.isDone()).toBeTruthy();
     });
   });
+
+  describe('getLegalDocumentById()', () => {
+    let folderAPI: nock.Scope;
+    beforeEach(() => {
+      folderAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/legal-documents/${legalDocumentSample.id}`,
+        response: legalDocumentSample,
+        method: 'get',
+      });
+    });
+    it('should fetch the specified document', async () => {
+      const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
+        clientId: 'a',
+        clientSecret: 'b',
+        id: '1',
+        createdAt: new Date().toISOString(),
+      });
+
+      await serviceAccount.getLegalDocumentById({
+        folderId: folderSample.id,
+        legalDocumentId: legalDocumentSample.id,
+      });
+
+      expect(folderAPI.isDone()).toBeTruthy();
+    });
+  });
 });

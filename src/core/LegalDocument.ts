@@ -62,6 +62,23 @@ export class LegalDocument extends Document implements ILegalDocument {
   }
 
   /**
+   * Get a legal document by id
+   * @param requestBuilder Request Builder
+   * @param params identifiers required to get the resource
+   */
+  public static async getById(
+    requestBuilder: RequestBuilder,
+    params: { folderId: string; legalDocumentId: string },
+  ): Promise<LegalDocument> {
+    const legalDocument: ILegalDocument = await requestBuilder.request({
+      method: 'GET',
+      url: `/v1/folders/${params.folderId}/legal-documents/${params.legalDocumentId}`,
+    });
+
+    return new LegalDocument(legalDocument, params.folderId, requestBuilder);
+  }
+
+  /**
    * Get one file in a specific document section, in a chosen folder.
    *
    * @param requestBuilder Service account request builder

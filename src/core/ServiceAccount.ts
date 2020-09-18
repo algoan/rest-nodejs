@@ -190,4 +190,12 @@ export class ServiceAccount {
   }): Promise<LegalFile> {
     return LegalDocument.getFileById(this.requestBuilder, params);
   }
+
+  /**
+   * Get a legal document by id
+   * @param params folder and document identifiers
+   */
+  public async getLegalDocumentById(params: { folderId: string; legalDocumentId: string }): Promise<LegalDocument> {
+    return LegalDocument.getById(this.requestBuilder, params);
+  }
 }

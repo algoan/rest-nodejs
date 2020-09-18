@@ -74,6 +74,25 @@ describe('Tests related to the LegalDocument class', () => {
     });
   });
 
+  describe('static getById()', () => {
+    beforeEach(() => {
+      legalDocumentAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/folders/${folderSample.id}/legal-documents/${legalDocumentSample.id}`,
+        response: legalDocumentSample,
+        method: 'get',
+      });
+    });
+    it('should fetch the specified file', async () => {
+      await LegalDocument.getById(requestBuilder, {
+        folderId: folderSample.id,
+        legalDocumentId: legalDocumentSample.id,
+      });
+
+      expect(legalDocumentAPI.isDone()).toBeTruthy();
+    });
+  });
+
   describe('uploadFile()', () => {
     beforeEach(() => {
       legalDocumentAPI = getFakeAlgoanServer({

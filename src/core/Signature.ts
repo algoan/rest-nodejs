@@ -1,5 +1,12 @@
 import { RequestBuilder } from '..';
-import { ISignature, Holder, SignatureState, PostSignatureDTO, PatchSignatureDTO } from '../lib';
+import {
+  ISignature,
+  Holder,
+  SignatureState,
+  PostSignatureDTO,
+  PatchSignatureDTO,
+  MultiResourceCreationResponse,
+} from '../lib';
 
 /**
  * Signature instance
@@ -83,23 +90,29 @@ export class Signature implements ISignature {
   }
 
   /**
-   * Create a new signature instance
+   * Create new signature instances
    * @param requestBuilder Service account request builder
    * @param body POST signature request body
-   * See more info here: https://stg-docs.int.algoan.net/api/#operation/createSignatureDocument
+   * See more info here: https://developers.algoan.com/api/#operation/createSignatureDocument
    */
   public static async create(
     requestBuilder: RequestBuilder,
     folderId: string,
-    body: PostSignatureDTO,
-  ): Promise<Signature> {
-    const signature: ISignature = await requestBuilder.request({
+    body: PostSignatureDTO[],
+  ): Promise<MultiResourceCreationResponse<Signature>> {
+    const signatures: MultiResourceCreationResponse<ISignature> = await requestBuilder.request({
       url: `/v1/folders/${folderId}/signatures`,
       method: 'POST',
       data: body,
     });
 
-    return new Signature(folderId, signature, requestBuilder);
+    return {
+      ...signatures,
+      elements: signatures.elements.map((element) => ({
+        ...element,
+        resource: new Signature(folderId, element.resource, requestBuilder),
+      })),
+    };
   }
 
   /**

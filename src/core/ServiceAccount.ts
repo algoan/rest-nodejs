@@ -157,11 +157,14 @@ export class ServiceAccount {
   }
 
   /**
-   * Create a signature from a given folder id
+   * Create signatures from a given folder id
    * @param folderId Unique folder identifier
-   * @param signatureBody Signature instance to create
+   * @param signatureBody Signature instances to create
    */
-  public async createSignature(folderId: string, signatureBody: PostSignatureDTO): Promise<Signature> {
+  public async createSignature(
+    folderId: string,
+    signatureBody: PostSignatureDTO[],
+  ): Promise<MultiResourceCreationResponse<Signature>> {
     return Signature.create(this.requestBuilder, folderId, signatureBody);
   }
   /**

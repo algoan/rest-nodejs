@@ -86,7 +86,7 @@ export class Signature implements ISignature {
    * Create a new signature instance
    * @param requestBuilder Service account request builder
    * @param body POST signature request body
-   * See more info here: https://stg-docs.int.algoan.net/api/#operation/createSignatureDocument
+   * See more info here: https://developers.algoan.com/api/#operation/createSignatureDocument
    */
   public static async create(
     requestBuilder: RequestBuilder,

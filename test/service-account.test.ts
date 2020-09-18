@@ -300,7 +300,10 @@ describe('Tests related to the ServiceAccount class', () => {
       signatureAPI = getFakeAlgoanServer({
         baseUrl,
         path: `/v1/folders/${folderSample.id}/signatures`,
-        response: folderSample.signatures[0],
+        response: {
+          elements: [{ resource: folderSample.signatures[0] }],
+          metadata: { failure: 0, success: 1, total: 1 },
+        },
         method: 'post',
       });
     });
@@ -311,11 +314,14 @@ describe('Tests related to the ServiceAccount class', () => {
         id: '1',
         createdAt: new Date().toISOString(),
       });
-      const signature: Signature = await serviceAccount.createSignature(folderSample.id, {
-        partnerId: 'provider_id',
-        legalDocumentIds: ['doc_id'],
-        holder: Holder.APPLICANT,
-      });
+      const signatures = await serviceAccount.createSignature(folderSample.id, [
+        {
+          partnerId: 'provider_id',
+          legalDocumentIds: ['doc_id'],
+          holder: Holder.APPLICANT,
+        },
+      ]);
+      const signature = signatures.elements[0].resource;
       expect(signatureAPI.isDone()).toBeTruthy();
       expect(signature).toBeInstanceOf(Signature);
     });

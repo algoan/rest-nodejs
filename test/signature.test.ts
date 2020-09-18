@@ -36,22 +36,33 @@ describe('Tests related to the Application class', () => {
         baseUrl,
         path: `/v1/folders/${folderSample.id}/signatures`,
         response: {
-          state: 0,
-          legalDocumentIds: ['random_legal_id'],
-          id: '5f3663fc3ec5884afc8ed04f',
-          partnerId: 'SIGN_ID',
-          holder: 'APPLICANT',
-          createdAt: 1560675749902,
+          elements: [
+            {
+              resource: {
+                state: 0,
+                legalDocumentIds: ['random_legal_id'],
+                id: '5f3663fc3ec5884afc8ed04f',
+                partnerId: 'SIGN_ID',
+                holder: 'APPLICANT',
+                createdAt: 1560675749902,
+              },
+              status: 200,
+            },
+          ],
+          metadata: { failure: 0, success: 1, total: 1 },
         },
         method: 'post',
       });
     });
     it('should create a signature', async () => {
-      const signature: ISignature = await Signature.create(requestBuilder, folderSample.id, {
-        partnerId: 'SIGN_ID',
-        legalDocumentIds: ['random_legal_id'],
-        holder: Holder.APPLICANT,
-      });
+      const signatures = await Signature.create(requestBuilder, folderSample.id, [
+        {
+          partnerId: 'SIGN_ID',
+          legalDocumentIds: ['random_legal_id'],
+          holder: Holder.APPLICANT,
+        },
+      ]);
+      const signature = signatures.elements[0].resource;
       expect(signatureAPI.isDone()).toBeTruthy();
       expect(signature).toBeInstanceOf(Signature);
       expect(signature.id).toEqual('5f3663fc3ec5884afc8ed04f');

@@ -3,3 +3,4 @@ export * from './Algoan.enum';
 export * from './Algoan.dto';
 export * from './Application.interface';
 export * from './Folder.interface';
+export * from './Logger.interface';

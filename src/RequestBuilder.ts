@@ -1,5 +1,6 @@
 import { stringify } from 'querystring';
-import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { Logger } from '.';
 
 /**
  * Axios layer setting automatically an authorization header
@@ -14,7 +15,11 @@ export class RequestBuilder {
    */
   private accessTokenInstance?: AccessToken;
 
-  constructor(private readonly baseUrl: string, private readonly credentials: Credentials) {
+  constructor(
+    private readonly baseUrl: string,
+    private readonly credentials: Credentials,
+    options?: { debug?: boolean; logger?: Logger },
+  ) {
     this.axiosInstance = Axios.create({
       baseURL: this.baseUrl,
     });
@@ -26,6 +31,44 @@ export class RequestBuilder {
         return config;
       },
     );
+
+    if (options?.debug === true && options.logger !== undefined) {
+      const logger: Logger = options.logger;
+      this.axiosInstance.interceptors.request.use(
+        async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+          logger.info(`${this.credentials.clientId} - [${config.method} ${config.url}] Incoming request`, {
+            headers: config.headers,
+            data: config.data,
+          });
+
+          return config;
+        },
+      );
+      this.axiosInstance.interceptors.response.use(
+        <T>(response: AxiosResponse<T>): AxiosResponse<T> => {
+          logger.info(
+            `${this.credentials.clientId} - [${response.status} ${response.config.method} ${response.config.url}] Outcoming request`,
+            {
+              headers: response.headers,
+              data: response.data,
+            },
+          );
+
+          return response;
+        },
+        async <T>(error: AxiosError<T>): Promise<AxiosError<T>> => {
+          /* istanbul ignore next */
+          logger.error(
+            `ERROR ${this.credentials.clientId} - [${error?.response?.status} ${error.config.method} ${error.config.url}] Outcoming request`,
+            {
+              data: error?.response?.data,
+            },
+          );
+
+          return Promise.reject(error);
+        },
+      );
+    }
   }
 
   /**

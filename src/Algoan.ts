@@ -1,7 +1,9 @@
+import { LoggerOptions, createLogger, transports } from 'winston';
 import { RequestBuilder } from './RequestBuilder';
-import { PostSubscriptionDTO, EventName, Logger } from './lib';
+import { PostSubscriptionDTO, EventName } from './lib';
 import { ServiceAccount } from './core/ServiceAccount';
 import { Subscription } from './core';
+
 /**
  * Algoan API
  */
@@ -21,6 +23,15 @@ export class Algoan {
 
   constructor(parameters: AlgoanOptions) {
     this.baseUrl = parameters.baseUrl;
+    const defaultLoggerOptions: LoggerOptions = {
+      transports: [
+        new transports.Console({
+          level: 'info',
+          stderrLevels: ['error'],
+          consoleWarnLevels: ['warn'],
+        }),
+      ],
+    };
     this.requestBuilder = new RequestBuilder(
       this.baseUrl,
       {
@@ -30,7 +41,7 @@ export class Algoan {
         password: parameters.password,
       },
       {
-        logger: parameters.logger,
+        logger: createLogger({ ...defaultLoggerOptions, ...parameters.loggerOptions }),
         debug: parameters.debug,
       },
     );
@@ -118,5 +129,5 @@ interface AlgoanOptions {
   username?: string;
   password?: string;
   debug?: boolean;
-  logger?: Logger;
+  loggerOptions?: LoggerOptions;
 }

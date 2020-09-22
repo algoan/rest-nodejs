@@ -1,6 +1,6 @@
 import { stringify } from 'querystring';
 import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Logger } from '.';
+import { Logger } from 'winston';
 
 /**
  * Axios layer setting automatically an authorization header
@@ -31,7 +31,6 @@ export class RequestBuilder {
         return config;
       },
     );
-
     if (options?.debug === true && options.logger !== undefined) {
       const logger: Logger = options.logger;
       this.axiosInstance.interceptors.request.use(

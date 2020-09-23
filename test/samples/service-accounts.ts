@@ -12,5 +12,8 @@ export const serviceAccounts: IServiceAccount[] = [
     clientId: 'clientId2',
     clientSecret: 'clientSecret2',
     createdAt: new Date().toISOString(),
+    config: {
+      a: 'b',
+    },
   },
 ];

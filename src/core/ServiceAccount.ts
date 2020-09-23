@@ -58,6 +58,7 @@ export class ServiceAccount {
       clientId: params.clientId,
       clientSecret: params.clientSecret,
     });
+    this.config = params.config;
   }
 
   /**

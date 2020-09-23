@@ -17,6 +17,8 @@ export interface IServiceAccount {
   clientId: string;
   clientSecret: string;
   createdAt: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  config?: any;
 }
 
 /**

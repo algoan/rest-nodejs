@@ -59,6 +59,10 @@ describe('Tests related to the ServiceAccount class', () => {
         expect(sa).toBeInstanceOf(ServiceAccount);
         expect(sa.subscriptions).toEqual([]);
       }
+
+      expect(serviceAccounts[1].config).toEqual({
+        a: 'b',
+      });
     });
   });
 

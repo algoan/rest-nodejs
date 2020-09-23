@@ -91,6 +91,7 @@ export class RequestBuilder {
           refresh_token: this.accessTokenInstance.refresh_token,
           grant_type: 'refresh_token',
           client_id: this.credentials.clientId,
+          client_secret: this.credentials.clientSecret,
         }),
         {
           headers: {

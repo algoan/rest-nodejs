@@ -1,3 +1,4 @@
+import * as FormData from 'form-data';
 import {
   ILegalDocument,
   LegalDocumentCategory,
@@ -101,12 +102,33 @@ export class LegalDocument extends Document implements ILegalDocument {
    * @param body the content of the file to upload
    */
   public async uploadFile(body: PostLegalFileDTO): Promise<LegalFile> {
-    const filePayload = body.file ? await this.getFilePayload(body.file) : undefined;
+    // TODO: handle the case the file is a ReadStream
+    let data;
+    if (body.file !== undefined) {
+      data = new FormData();
+      data.append('file', body.file, {
+        knownLength: body.file.length, // tslint:disable-line
+        filename: body.name,
+      });
+
+      if (body.state !== undefined) {
+        data.append('state', body.state);
+      }
+      if (body.type !== undefined) {
+        data.append('type', body.type);
+      }
+      if (body.rejectionCode !== undefined) {
+        data.append('rejectionCode', body.rejectionCode);
+      }
+    } else {
+      data = body.file;
+    }
+
     const file = await this.requestBuilder.request<LegalFile>({
-      headers: filePayload ? { 'Content-Type': 'multipart/form-data' } : undefined,
+      headers: body.file ? data.getHeaders() : undefined, // eslint-disable-line
       url: `/v1/folders/${this.folderId}/legal-documents/${this.id}/files`,
       method: 'POST',
-      data: { ...body, file: filePayload },
+      data,
     });
 
     this.files.push(file);

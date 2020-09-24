@@ -153,6 +153,7 @@ export const fileToUploadWithoutMedia: PostLegalFileDTO = {
   rejectionCode: 23,
   state: FileState.IN_PROGRESS,
   type: LegalFileType.BANK_RECORDS,
+  name: 'file name',
 };
 
 export const fileToUploadWithMedia: PostLegalFileDTO = {
@@ -160,6 +161,12 @@ export const fileToUploadWithMedia: PostLegalFileDTO = {
   rejectionCode: 23,
   state: FileState.IN_PROGRESS,
   type: LegalFileType.BANK_RECORDS,
+  name: 'file name',
+};
+
+export const fileToUploadWithMediaWithoutOtherInfos: PostLegalFileDTO = {
+  file: createReadStream(__filename),
+  name: 'file name',
 };
 
 export const newLegalDocuments: PostLegalDocumentDTO[] = [

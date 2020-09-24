@@ -1,6 +1,4 @@
-import { ReadStream } from 'fs';
 // eslint-disable-next-line  @typescript-eslint/no-require-imports
-import FormData = require('form-data');
 import {
   IDocument,
   Holder,
@@ -111,16 +109,16 @@ export abstract class Document implements IDocument {
    * readstream.
    *
    * @param readStream the readstream to transform
-   */
-  protected async getFilePayload(readStream: ReadStream): Promise<FormData> {
+   
+  protected static async getFilePayload(readStream: ReadStream): Promise<FormData> {
     return new Promise((resolve) => {
       readStream.on('end', async () => {
         const formData = new FormData();
-        formData.append(this.id, (readStream as unknown) as Blob);
+        formData.append('file', readStream);
         resolve(formData);
       });
-
+   
       readStream.read();
     });
-  }
+  }*/
 }

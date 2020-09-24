@@ -7,6 +7,7 @@ import { LegalDocument } from '../src';
 import {
   fileToUploadWithMedia,
   fileToUploadWithoutMedia,
+  fileToUploadWithMediaWithoutOtherInfos,
   legalDocumentSample,
   legalFileSample,
   newLegalDocuments,
@@ -116,6 +117,15 @@ describe('Tests related to the LegalDocument class', () => {
       const legalDocument = new LegalDocument(legalDocumentSample, folderSample.id, requestBuilder);
       const nbOfFiles = legalDocument.files.length;
       await legalDocument.uploadFile(fileToUploadWithMedia);
+
+      expect(legalDocumentAPI.isDone()).toBeTruthy();
+      expect(legalDocument.files.length).toBe(nbOfFiles + 1);
+    });
+
+    it('should upload the given file some properties are missing', async () => {
+      const legalDocument = new LegalDocument(legalDocumentSample, folderSample.id, requestBuilder);
+      const nbOfFiles = legalDocument.files.length;
+      await legalDocument.uploadFile(fileToUploadWithMediaWithoutOtherInfos);
 
       expect(legalDocumentAPI.isDone()).toBeTruthy();
       expect(legalDocument.files.length).toBe(nbOfFiles + 1);

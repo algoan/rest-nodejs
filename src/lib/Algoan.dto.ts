@@ -1,4 +1,3 @@
-import { ReadStream } from 'fs';
 import { EventName, UsageType, AccountType, BanksUserTransactionType, BanksUserStatus } from './Algoan.enum';
 import { SubscriptionStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
 import { ApplicationStatus, ExternalError } from './Application.interface';
@@ -111,10 +110,11 @@ export interface PostLegalDocumentDTO {
  * POST /folders/:id/legal-documents/:id/files DTO interface
  */
 export interface PostLegalFileDTO {
-  file?: ReadStream;
+  file?: any; // eslint-disable-line
   rejectionCode?: number;
   state?: FileState;
   type?: LegalFileType;
+  name?: string;
 }
 
 /**

@@ -230,6 +230,10 @@ export interface Bank {
    * IBAN of the user
    */
   iban?: string;
+  /**
+   * BIC of the user
+   */
+  bic?: string;
 }
 
 /**

@@ -52,6 +52,31 @@ describe('Tests related to the BanksUser class', () => {
     });
   });
 
+  describe('static create()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users',
+        response: banksUserSample,
+        method: 'post',
+      });
+    });
+    it('should create a new Banks User', async () => {
+      const banksUser: BanksUser = await BanksUser.create(
+        {
+          callbackUrl: 'http://...',
+          adenTriggers: {
+            onSynchronizationFinished: true,
+            bankreaderLinkRequired: true,
+          },
+        },
+        requestBuilder,
+      );
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(banksUser).toBeInstanceOf(BanksUser);
+    });
+  });
+
   describe('static getAccounts()', () => {
     beforeEach(() => {
       banksUserAPI = getFakeAlgoanServer({

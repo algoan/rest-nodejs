@@ -1,6 +1,7 @@
 import { EventName, UsageType, AccountType, BanksUserTransactionType, BanksUserStatus } from './Algoan.enum';
-import { SubscriptionStatus, PlugIn, Score, Analysis, LoanDetails } from './Algoan.interface';
+import { SubscriptionStatus } from './Algoan.interface';
 import { ApplicationStatus, ExternalError } from './Application.interface';
+import { PlugIn, Score, Analysis, LoanDetails } from './BanksUser.interface';
 import {
   DocumentPeriod,
   ESPlugIn,
@@ -140,4 +141,15 @@ export interface PatchSignatureDTO {
   redirectUrl?: string;
   redirectUrlTTL?: number;
   holder?: Holder;
+}
+
+/**
+ * POST /banks-users DTO interface
+ */
+export interface PostBanksUserDTO {
+  callbackUrl?: string;
+  adenTriggers?: {
+    onSynchronizationFinished?: boolean;
+    bankreaderLinkRequired?: boolean;
+  };
 }

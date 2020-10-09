@@ -10,6 +10,8 @@ import {
   MultiResourceCreationResponse,
   BanksUserTransaction,
   BanksUserAccount,
+  PostBanksUserDTO,
+  Aden,
 } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
@@ -54,6 +56,18 @@ export class BanksUser {
    */
   public analysis?: Analysis;
   /**
+   * Optional identifier
+   */
+  public partnerId?: string;
+  /**
+   * ADEN triggers
+   */
+  public adenTriggers?: { onSynchronizationFinished?: boolean; bankreaderLinkRequired?: boolean };
+  /**
+   * Score result
+   */
+  public aden?: Aden;
+  /**
    * Request builder instance
    */
   private readonly requestBuilder: RequestBuilder;
@@ -68,6 +82,9 @@ export class BanksUser {
     this.plugIn = params.plugIn;
     this.scores = params.scores;
     this.analysis = params.analysis;
+    this.partnerId = params.partnerId;
+    this.adenTriggers = params.adenTriggers;
+    this.aden = params.aden;
     this.requestBuilder = requestBuilder;
   }
 
@@ -81,6 +98,21 @@ export class BanksUser {
     const banksUser: IBanksUser = await requestBuilder.request({
       url: `/v1/banks-users/${id}`,
       method: 'GET',
+    });
+
+    return new BanksUser(banksUser, requestBuilder);
+  }
+
+  /**
+   * Create a new Banks User
+   * @param body POST banks user request body
+   * @param requestBuilder Request builder
+   */
+  public static async create(body: PostBanksUserDTO, requestBuilder: RequestBuilder): Promise<BanksUser> {
+    const banksUser: IBanksUser = await requestBuilder.request({
+      method: 'POST',
+      url: '/v1/banks-users',
+      data: body,
     });
 
     return new BanksUser(banksUser, requestBuilder);
@@ -129,9 +161,15 @@ export class BanksUser {
    * Update a banksUser
    * @param body Patch banks user request body
    */
-  public async update(body: PatchBanksUserDTO): Promise<void> {
+  public async update(body: PatchBanksUserDTO, code?: string): Promise<void> {
+    let url: string = `/v1/banks-users/${this.id}`;
+
+    if (code !== undefined) {
+      url += `?code=${code}`;
+    }
+
     const banksUser: IBanksUser = await this.requestBuilder.request({
-      url: `/v1/banks-users/${this.id}`,
+      url,
       method: 'PATCH',
       data: body,
     });

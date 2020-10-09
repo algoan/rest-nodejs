@@ -52,6 +52,31 @@ describe('Tests related to the BanksUser class', () => {
     });
   });
 
+  describe('static create()', () => {
+    beforeEach(() => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users',
+        response: banksUserSample,
+        method: 'post',
+      });
+    });
+    it('should create a new Banks User', async () => {
+      const banksUser: BanksUser = await BanksUser.create(
+        {
+          callbackUrl: 'http://...',
+          adenTriggers: {
+            onSynchronizationFinished: true,
+            bankreaderLinkRequired: true,
+          },
+        },
+        requestBuilder,
+      );
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(banksUser).toBeInstanceOf(BanksUser);
+    });
+  });
+
   describe('static getAccounts()', () => {
     beforeEach(() => {
       banksUserAPI = getFakeAlgoanServer({
@@ -104,6 +129,27 @@ describe('Tests related to the BanksUser class', () => {
       await banksUser.update({
         status: BanksUserStatus.FINISHED,
       });
+
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(banksUser.status).toEqual('FINISHED');
+    });
+
+    it('should update the BanksUser with a code', async () => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1?code=code',
+        response: banksUserSample,
+        method: 'patch',
+      });
+      const banksUser: BanksUser = new BanksUser(banksUserSample, requestBuilder);
+      banksUser.status = BanksUserStatus.NEW;
+
+      await banksUser.update(
+        {
+          status: BanksUserStatus.FINISHED,
+        },
+        'code',
+      );
 
       expect(banksUserAPI.isDone()).toBeTruthy();
       expect(banksUser.status).toEqual('FINISHED');

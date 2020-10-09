@@ -23,6 +23,7 @@ export interface IBanksUser {
   analysis?: Analysis;
   adenTriggers?: { onSynchronizationFinished?: boolean; bankreaderLinkRequired?: boolean };
   partnerId?: string;
+  aden?: Aden;
 }
 
 /**
@@ -130,4 +131,114 @@ export interface BanksUserTransaction {
   reference?: string;
   simplifiedDescription?: string;
   userDescription?: string;
+}
+
+/**
+ * ADEN details
+ */
+export interface Aden {
+  budget: Budget;
+  bureau: Bureau;
+  dataQuality: DataQuality;
+  score: ScoreResult;
+}
+
+/**
+ * Bureau result
+ */
+interface Bureau {
+  credit: {
+    loans: Loan;
+    locDrawDowns: Loan;
+  };
+  events: {
+    bankAccountSeizure: boolean;
+    thirdPartyHolderNotice: boolean;
+    wageAdvances: AmountCount;
+  };
+  gambling: AmountCount;
+  incidents: {
+    checkRejections: AmountCount;
+    fees: AmountCount;
+    paymentRejections: AmountCount;
+  };
+  overdraft: {
+    fees: AmountCount;
+    hard: number;
+    max: number;
+    total: number;
+  };
+}
+
+/**
+ * Cashflow result
+ */
+interface Budget {
+  cashflows: Cashflow[];
+  indicators: {
+    allowancesRatio: number;
+    debtToIncome: number;
+    residualIncome: number;
+  };
+}
+
+/**
+ * Data quality
+ */
+interface DataQuality {
+  calendar: {
+    month: number;
+    nbDays: number;
+  };
+  historicalDepth: number;
+  lastTransactionGap: number;
+  numberOfCheckings: number;
+  numberOfCreditCards: number;
+  numberOfLoans: number;
+  numberOfSavings: number;
+  transactionsFrequency: number;
+}
+
+/**
+ * Score v2 result
+ */
+interface ScoreResult {
+  indicators: {
+    cash: number;
+    lifestyle: number;
+    savings: number;
+  };
+  score: number;
+}
+
+/**
+ * Cashflow model
+ */
+interface Cashflow {
+  calendar: {
+    amount: number;
+    month: number;
+  }[];
+  dueDay?: number;
+  label?: string;
+  monthlyAmount: number;
+  nbTransactions: number;
+  references: string[];
+  totalAmount: number;
+  type: string;
+}
+
+/**
+ * Amount-count
+ */
+interface AmountCount {
+  amount: number;
+  count: number;
+}
+
+/**
+ * Loan
+ */
+interface Loan extends AmountCount {
+  nbLenders: number;
 }

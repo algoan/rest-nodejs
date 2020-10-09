@@ -11,6 +11,7 @@ import {
   BanksUserTransaction,
   BanksUserAccount,
   PostBanksUserDTO,
+  Aden,
 } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
@@ -63,6 +64,10 @@ export class BanksUser {
    */
   public adenTriggers?: { onSynchronizationFinished?: boolean; bankreaderLinkRequired?: boolean };
   /**
+   * Score result
+   */
+  public aden?: Aden;
+  /**
    * Request builder instance
    */
   private readonly requestBuilder: RequestBuilder;
@@ -79,6 +84,7 @@ export class BanksUser {
     this.analysis = params.analysis;
     this.partnerId = params.partnerId;
     this.adenTriggers = params.adenTriggers;
+    this.aden = params.aden;
     this.requestBuilder = requestBuilder;
   }
 

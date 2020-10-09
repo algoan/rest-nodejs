@@ -155,9 +155,15 @@ export class BanksUser {
    * Update a banksUser
    * @param body Patch banks user request body
    */
-  public async update(body: PatchBanksUserDTO): Promise<void> {
+  public async update(body: PatchBanksUserDTO, code?: string): Promise<void> {
+    let url: string = `/v1/banks-users/${this.id}`;
+
+    if (code !== undefined) {
+      url += `?code=${code}`;
+    }
+
     const banksUser: IBanksUser = await this.requestBuilder.request({
-      url: `/v1/banks-users/${this.id}`,
+      url,
       method: 'PATCH',
       data: body,
     });

@@ -133,6 +133,27 @@ describe('Tests related to the BanksUser class', () => {
       expect(banksUserAPI.isDone()).toBeTruthy();
       expect(banksUser.status).toEqual('FINISHED');
     });
+
+    it('should update the BanksUser with a code', async () => {
+      banksUserAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/banks-users/id1?code=code',
+        response: banksUserSample,
+        method: 'patch',
+      });
+      const banksUser: BanksUser = new BanksUser(banksUserSample, requestBuilder);
+      banksUser.status = BanksUserStatus.NEW;
+
+      await banksUser.update(
+        {
+          status: BanksUserStatus.FINISHED,
+        },
+        'code',
+      );
+
+      expect(banksUserAPI.isDone()).toBeTruthy();
+      expect(banksUser.status).toEqual('FINISHED');
+    });
   });
 
   describe('createAccounts()', () => {

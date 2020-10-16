@@ -6,6 +6,7 @@ import { Subscription } from '../src/core/Subscription';
 import { EventName } from '../src';
 import { getOAuthServer, getFakeAlgoanServer } from './utils/fake-server.utils';
 import { subscriptions as subscriptionsSample } from './samples/subscriptions';
+import { SubscriptionEvent } from '../src/core/SubscriptionEvent';
 
 describe('Tests related to the Subscription class', () => {
   describe('static get()', () => {
@@ -203,6 +204,32 @@ describe('Tests related to the Subscription class', () => {
       );
 
       expect(subscription.validateSignature(hash, fakePayloadSent)).toBeFalsy();
+    });
+  });
+
+  describe('event()', () => {
+    let requestBuilder: RequestBuilder;
+
+    afterEach(() => {
+      jest.clearAllMocks();
+      nock.cleanAll();
+    });
+    it('SB040 - should return a SubscriptionEvent', () => {
+      const subscription: Subscription = new Subscription(
+        {
+          target: 'baseUrl',
+          id: '1',
+          eventName: EventName.APPLICATION_UPDATED,
+          status: 'DISABLE',
+        },
+        requestBuilder,
+      );
+
+      const subscriptionEvent: SubscriptionEvent = subscription.event('eventId');
+
+      expect(subscriptionEvent).toBeInstanceOf(SubscriptionEvent);
+      expect(subscriptionEvent.eventId).toEqual('eventId');
+      expect(subscriptionEvent.subscriptionId).toEqual('1');
     });
   });
 });

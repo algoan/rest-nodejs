@@ -41,10 +41,19 @@ export class Subscription {
    * Get all subscriptions attached to a service account
    * @param requestBuilder Service account request builder
    */
-  public static async get(requestBuilder: RequestBuilder): Promise<Subscription[]> {
+  public static async get(requestBuilder: RequestBuilder, events?: EventName[]): Promise<Subscription[]> {
+    let params = {};
+    if (Array.isArray(events) && events.length) {
+      params = {
+        filter: JSON.stringify({
+          eventName: { $in: events },
+        }),
+      };
+    }
     const subscriptions: ISubscription[] = await requestBuilder.request({
       url: '/v1/subscriptions',
       method: 'GET',
+      params,
     });
 
     return subscriptions.map((sub: ISubscription) => new Subscription(sub, requestBuilder));

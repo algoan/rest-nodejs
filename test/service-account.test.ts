@@ -83,7 +83,7 @@ describe('Tests related to the ServiceAccount class', () => {
         createdAt: new Date().toISOString(),
       });
 
-      await serviceAccount.getSubscriptions();
+      await serviceAccount.getSubscriptions([EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED]);
       expect(serviceAccount.subscriptions).toHaveLength(2);
       expect(subscriptionSpy).toHaveBeenCalled();
     });
@@ -138,12 +138,15 @@ describe('Tests related to the ServiceAccount class', () => {
         createdAt: new Date().toISOString(),
       });
 
-      await serviceAccount.getOrCreateSubscriptions([
-        {
-          target: 'http://...',
-          eventName: EventName.APPLICATION_UPDATED,
-        },
-      ]);
+      await serviceAccount.getOrCreateSubscriptions(
+        [
+          {
+            target: 'http://...',
+            eventName: EventName.APPLICATION_UPDATED,
+          },
+        ],
+        [EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED],
+      );
       expect(serviceAccount.subscriptions).toHaveLength(2);
       expect(getSubscriptionSpy).toHaveBeenCalled();
       expect(createSubscriptionSpy).not.toHaveBeenCalled();
@@ -159,12 +162,15 @@ describe('Tests related to the ServiceAccount class', () => {
         createdAt: new Date().toISOString(),
       });
 
-      await serviceAccount.getOrCreateSubscriptions([
-        {
-          target: 'http://...',
-          eventName: EventName.APPLICATION_UPDATED,
-        },
-      ]);
+      await serviceAccount.getOrCreateSubscriptions(
+        [
+          {
+            target: 'http://...',
+            eventName: EventName.APPLICATION_UPDATED,
+          },
+        ],
+        [EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED],
+      );
       expect(serviceAccount.subscriptions).toHaveLength(1);
       expect(getSubscriptionSpy).toHaveBeenCalled();
       expect(createSubscriptionSpy).toHaveBeenCalled();
@@ -188,12 +194,15 @@ describe('Tests related to the ServiceAccount class', () => {
         createdAt: new Date().toISOString(),
       });
 
-      await serviceAccount.getOrCreateSubscriptions([
-        {
-          target: 'http://...',
-          eventName: EventName.APPLICATION_UPDATED,
-        },
-      ]);
+      await serviceAccount.getOrCreateSubscriptions(
+        [
+          {
+            target: 'http://...',
+            eventName: EventName.APPLICATION_UPDATED,
+          },
+        ],
+        [EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED],
+      );
       expect(serviceAccount.subscriptions).toHaveLength(1);
       expect(getSubscriptionSpy).toHaveBeenCalled();
       expect(createSubscriptionSpy).not.toHaveBeenCalled();

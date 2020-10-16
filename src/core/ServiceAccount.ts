@@ -6,6 +6,7 @@ import {
   LegalFile,
   MultiResourceCreationResponse,
   PostLegalDocumentDTO,
+  EventName,
 } from '../lib';
 import { Subscription } from './Subscription';
 import { BanksUser } from './BanksUser';
@@ -77,8 +78,8 @@ export class ServiceAccount {
   /**
    * Fetch all subscriptions
    */
-  public async getSubscriptions(): Promise<Subscription[]> {
-    const subscriptions: Subscription[] = await Subscription.get(this.requestBuilder);
+  public async getSubscriptions(events?: EventName[]): Promise<Subscription[]> {
+    const subscriptions: Subscription[] = await Subscription.get(this.requestBuilder, events);
     this.subscriptions = subscriptions;
 
     return subscriptions;
@@ -105,8 +106,11 @@ export class ServiceAccount {
    * Update them to the ACTIVE status if there are not active
    * @param subscriptionBodies Subscription request bodies to potentially create
    */
-  public async getOrCreateSubscriptions(subscriptionBodies: PostSubscriptionDTO[]): Promise<Subscription[]> {
-    const subscriptions: Subscription[] = await this.getSubscriptions();
+  public async getOrCreateSubscriptions(
+    subscriptionBodies: PostSubscriptionDTO[],
+    events?: EventName[],
+  ): Promise<Subscription[]> {
+    const subscriptions: Subscription[] = await this.getSubscriptions(events);
 
     if (subscriptions.length === 0) {
       return this.createSubscriptions(subscriptionBodies);

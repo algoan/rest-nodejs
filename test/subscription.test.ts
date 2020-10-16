@@ -16,7 +16,11 @@ describe('Tests related to the Subscription class', () => {
     beforeEach(() => {
       subscriptionAPI = getFakeAlgoanServer({
         baseUrl,
-        path: '/v1/subscriptions',
+        path: `/v1/subscriptions?filter=${JSON.stringify({
+          eventName: {
+            $in: [EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED],
+          },
+        })}`,
         response: subscriptionsSample,
         method: 'get',
       });
@@ -40,7 +44,25 @@ describe('Tests related to the Subscription class', () => {
     });
 
     it('SB001 - should get subscriptions', async () => {
-      const subscriptions: Subscription[] = await Subscription.get(requestBuilder);
+      const subscriptions: Subscription[] = await Subscription.get(requestBuilder, [
+        EventName.APPLICATION_UPDATED,
+        EventName.BANKREADER_COMPLETED,
+      ]);
+      expect(subscriptionAPI.isDone()).toBeTruthy();
+
+      for (const sb of subscriptions) {
+        expect(sb).toBeInstanceOf(Subscription);
+      }
+    });
+    it('SB002 - should get subscriptions (whithout event name filter)', async () => {
+      subscriptionAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/subscriptions`,
+        response: subscriptionsSample,
+        method: 'get',
+      });
+
+      const subscriptions: Subscription[] = await Subscription.get(requestBuilder, []);
       expect(subscriptionAPI.isDone()).toBeTruthy();
 
       for (const sb of subscriptions) {

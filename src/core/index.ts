@@ -1,5 +1,6 @@
 export * from './ServiceAccount';
 export * from './Subscription';
+export * from './SubscriptionEvent';
 export * from './BanksUser';
 export * from './Document';
 export * from './Folder';

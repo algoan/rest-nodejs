@@ -2,6 +2,7 @@ import { createHmac } from 'crypto';
 
 import { EventName, SubscriptionStatus, ISubscription, PostSubscriptionDTO, PatchSubscriptionDTO } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
+import { SubscriptionEvent } from './SubscriptionEvent';
 
 /**
  * Subscription class
@@ -93,5 +94,13 @@ export class Subscription {
     const expectedHash: string = createHmac('sha256', this.secret).update(JSON.stringify(payload)).digest('hex');
 
     return `sha256=${expectedHash}` === signatureHeader;
+  }
+
+  /**
+   * Create an event
+   * @param id Unique event identifier
+   */
+  public event(id: string): SubscriptionEvent {
+    return new SubscriptionEvent({ eventId: id, subscriptionId: this.id }, this.requestBuilder);
   }
 }

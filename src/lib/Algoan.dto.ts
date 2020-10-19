@@ -1,4 +1,11 @@
-import { EventName, UsageType, AccountType, BanksUserTransactionType, BanksUserStatus } from './Algoan.enum';
+import {
+  EventName,
+  UsageType,
+  AccountType,
+  BanksUserTransactionType,
+  BanksUserStatus,
+  EventStatus,
+} from './Algoan.enum';
 import { SubscriptionStatus } from './Algoan.interface';
 import { ApplicationStatus, ExternalError } from './Application.interface';
 import { PlugIn, Score, Analysis, LoanDetails } from './BanksUser.interface';
@@ -31,6 +38,25 @@ export interface PostSubscriptionDTO {
 export interface PatchSubscriptionDTO {
   /** Subscription status to update */
   status: SubscriptionStatus;
+}
+
+/**
+ * GET /subscriptions/:id/events DTO interface
+ */
+export interface GetSubscriptionEventsDTO {
+  /** The id of the application concerned by the event */
+  applicationId: string;
+  /** The index to which events are requested */
+  highIndex?: number;
+  /** The index from events are requested */
+  lowIndex?: number;
+}
+
+/**
+ * PATCH /subscriptions/:id/events/:eventId DTO interface
+ */
+export interface PatchSubscriptionEventDTO {
+  status: EventStatus;
 }
 
 /**

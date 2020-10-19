@@ -69,6 +69,26 @@ export enum EventName {
   KYC_OTHERS_CONFIGURATION_REQUIRED = 'kyc_others_configuration_required',
 }
 
+/**
+ * Enum for EventStatus
+ */
+export enum EventStatus {
+  /** IN_PROGRESS: Algoan has just created the event and is about to call the resthook */
+  IN_PROGRESS = 'IN_PROGRESS',
+  /** ACK: The connector has acknowledged the request */
+  ACK = 'ACK',
+  /** PROCESSED: Warns Algoan that the process has been fully completed */
+  PROCESSED = 'PROCESSED',
+  /** FAILED: Warns Algoan that an error occurred during the process */
+  FAILED = 'FAILED',
+  /** ERROR: The API did not acknowledge the request */
+  ERROR = 'ERROR',
+  /** WARNING: A warning email has been sent to the organization's contact */
+  WARNING = 'WARNING',
+  /** CRITICAL: A critical email has been sent to the organization's contact */
+  CRITICAL = 'CRITICAL',
+}
+
 export type AnalysisAlerts =
   | 'LOW_ACCOUNTS_READABILITY'
   | 'ADEN_USER_DIVERGENCE'

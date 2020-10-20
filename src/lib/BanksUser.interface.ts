@@ -17,7 +17,7 @@ export interface IBanksUser {
   redirectUrl: string;
   redirectUrlCreatedAt: number;
   redirectUrlTTL: number;
-  callbackUrl: string;
+  callbackUrl?: string;
   plugIn?: PlugIn;
   scores: Score[];
   analysis?: Analysis;

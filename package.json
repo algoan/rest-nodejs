@@ -89,7 +89,8 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "form-data": "^3.0.0"
+    "form-data": "^3.0.0",
+    "winston": "^3.3.3"
   },
   "publishConfig": {
     "access": "public"

@@ -3,6 +3,17 @@ import * as nock from 'nock';
 
 import { RequestBuilder } from '../src/RequestBuilder';
 import { getOAuthServer, getFakeAlgoanServer } from './utils/fake-server.utils';
+import { Logger, createLogger, transports } from 'winston';
+
+const defaultLogger: Logger = createLogger({
+  transports: [
+    new transports.Console({
+      level: 'info',
+      stderrLevels: ['error'],
+      consoleWarnLevels: ['warn'],
+    }),
+  ],
+});
 
 describe('Tests related to the RequestBuilder class', () => {
   const baseUrl: string = 'http://localhost:3000';
@@ -10,8 +21,8 @@ describe('Tests related to the RequestBuilder class', () => {
   let errorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    infoLogSpy = jest.spyOn(console, 'info');
-    errorSpy = jest.spyOn(console, 'error');
+    infoLogSpy = jest.spyOn(defaultLogger, 'info');
+    errorSpy = jest.spyOn(defaultLogger, 'error');
   });
 
   afterEach(() => {
@@ -169,7 +180,7 @@ describe('Tests related to the RequestBuilder class', () => {
       },
       {
         debug: true,
-        logger: console,
+        logger: defaultLogger,
       },
     );
     const oAuthServer: nock.Scope = getOAuthServer({
@@ -210,7 +221,7 @@ describe('Tests related to the RequestBuilder class', () => {
       },
       {
         debug: true,
-        logger: console,
+        logger: defaultLogger,
       },
     );
     const oAuthServer: nock.Scope = getOAuthServer({
@@ -295,7 +306,7 @@ describe('Tests related to the RequestBuilder class', () => {
       },
       {
         debug: false,
-        logger: console,
+        logger: defaultLogger,
       },
     );
     const oAuthServer: nock.Scope = getOAuthServer({

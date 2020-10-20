@@ -42,7 +42,7 @@ export class BanksUser {
   /**
    * Used to redirect the user after an external process
    */
-  public callbackUrl: string;
+  public callbackUrl?: string;
   /**
    * List of plug-in linked to the aggregation process
    */

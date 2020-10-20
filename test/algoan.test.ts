@@ -14,7 +14,11 @@ describe('Tests related to the Algoan class', () => {
     beforeEach(() => {
       subscriptionAPI = getFakeAlgoanServer({
         baseUrl,
-        path: '/v1/subscriptions',
+        path: `/v1/subscriptions?filter=${JSON.stringify({
+          eventName: {
+            $in: [EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED],
+          },
+        })}`,
         response: subscriptionsSample,
         method: 'get',
         nbOfCalls: 2,
@@ -47,7 +51,7 @@ describe('Tests related to the Algoan class', () => {
         clientSecret: 'b',
       });
 
-      await client.initRestHooks('http', [EventName.APPLICATION_UPDATED], 'a');
+      await client.initRestHooks('http', [EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED], 'a');
       expect(serviceAccountAPI.isDone()).toBeTruthy();
       expect(subscriptionAPI.isDone()).toBeTruthy();
 
@@ -69,7 +73,7 @@ describe('Tests related to the Algoan class', () => {
         clientSecret: 'b',
       });
 
-      await client.initRestHooks('http', [EventName.APPLICATION_UPDATED], 'a');
+      await client.initRestHooks('http', [EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED], 'a');
       expect(serviceAccountAPI.isDone()).toBeTruthy();
       expect(subscriptionAPI.isDone()).toBeFalsy();
 
@@ -77,6 +81,13 @@ describe('Tests related to the Algoan class', () => {
     });
 
     it('ALG003 - should do nothing - no event', async () => {
+      subscriptionAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: '/v1/subscriptions',
+        response: subscriptionsSample,
+        method: 'get',
+        nbOfCalls: 2,
+      });
       serviceAccountAPI = getFakeAlgoanServer({
         baseUrl,
         path: '/v1/service-accounts',
@@ -98,6 +109,14 @@ describe('Tests related to the Algoan class', () => {
     });
 
     it('ALG004 - should correctly get subscriptions and service accounts - multiple bodies', async () => {
+      subscriptionAPI = getFakeAlgoanServer({
+        baseUrl,
+        path: `/v1/subscriptions?filter=${JSON.stringify({ eventName: { $in: [EventName.APPLICATION_UPDATED] } })}`,
+        response: subscriptionsSample,
+        method: 'get',
+        nbOfCalls: 2,
+      });
+
       serviceAccountAPI = getFakeAlgoanServer({
         baseUrl,
         path: '/v1/service-accounts',

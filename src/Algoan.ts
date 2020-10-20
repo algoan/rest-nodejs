@@ -79,13 +79,18 @@ export class Algoan {
       return;
     }
 
+    const eventNames: EventName[] =
+      typeof subscriptionOrTarget === 'string'
+        ? events
+        : subscriptionOrTarget.map((sub: PostSubscriptionDTO) => sub.eventName);
+
     const subscriptionDTO: PostSubscriptionDTO[] =
       typeof subscriptionOrTarget === 'string'
-        ? this.fromEventToSubscriptionDTO(subscriptionOrTarget, events, secret)
+        ? this.fromEventToSubscriptionDTO(subscriptionOrTarget, eventNames, secret)
         : subscriptionOrTarget;
 
     for (const serviceAccount of this.serviceAccounts) {
-      await serviceAccount.getOrCreateSubscriptions(subscriptionDTO);
+      await serviceAccount.getOrCreateSubscriptions(subscriptionDTO, eventNames);
     }
   }
 

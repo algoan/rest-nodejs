@@ -341,4 +341,66 @@ describe('Tests related to the RequestBuilder class', () => {
     expect(infoLogSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledTimes(0);
   });
+
+  it('RB009 - should call the token API once - authorization in configs', async () => {
+    const authorization: string = 'Bearer accesstoken';
+    const requestBuilder: RequestBuilder = new RequestBuilder(baseUrl, {
+      clientId: 'clientId',
+    });
+    const oAuthServer: nock.Scope = getOAuthServer({
+      baseUrl,
+      isRefreshToken: false,
+      isUserPassword: true,
+      nbOfCalls: 1,
+    });
+    const randomAlgoanServer: nock.Scope = getFakeAlgoanServer({
+      baseUrl,
+      method: 'get',
+      path: '/',
+      response: [],
+      authorization,
+    });
+
+    await requestBuilder.request({
+      method: 'GET',
+      url: '/',
+      headers: { Authorization: authorization },
+    });
+
+    expect(oAuthServer.isDone()).toBeFalsy();
+    expect(randomAlgoanServer.isDone()).toBeTruthy();
+    expect((requestBuilder as any).accessTokenInstance).toBeUndefined();
+    expect((requestBuilder as any).authorizationHeader).toBeUndefined();
+  });
+
+  it('RB010 - should call the token API once - set the authorization', async () => {
+    const authorization: string = 'Bearer accesstoken';
+    const requestBuilder: RequestBuilder = new RequestBuilder(baseUrl, {
+      clientId: 'clientId',
+    });
+    const oAuthServer: nock.Scope = getOAuthServer({
+      baseUrl,
+      isRefreshToken: false,
+      isUserPassword: true,
+      nbOfCalls: 1,
+    });
+    const randomAlgoanServer: nock.Scope = getFakeAlgoanServer({
+      baseUrl,
+      method: 'get',
+      path: '/',
+      response: [],
+      authorization,
+    });
+    requestBuilder.setAuthorizationHeader(authorization);
+
+    await requestBuilder.request({
+      method: 'GET',
+      url: '/',
+    });
+
+    expect(oAuthServer.isDone()).toBeFalsy();
+    expect(randomAlgoanServer.isDone()).toBeTruthy();
+    expect((requestBuilder as any).accessTokenInstance).toBeUndefined();
+    expect((requestBuilder as any).authorizationHeader).toBeDefined();
+  });
 });

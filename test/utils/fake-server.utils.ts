@@ -56,10 +56,11 @@ export const getFakeAlgoanServer = (params: {
   response: Record<string, any>;
   nbOfCalls?: number;
   status?: number;
+  authorization?: string;
 }): nock.Scope =>
   nock(params.baseUrl, {
     reqheaders: {
-      authorization: `Bearer ${fakeAccessToken}`,
+      authorization: params.authorization ?? `Bearer ${fakeAccessToken}`,
     },
   })
     [params.method](params.path)

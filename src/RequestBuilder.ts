@@ -19,6 +19,7 @@ export class RequestBuilder {
     private readonly baseUrl: string,
     private readonly credentials: Credentials,
     options?: { debug?: boolean; logger?: Logger },
+    private _authorizationHeader?: string,
   ) {
     this.axiosInstance = Axios.create({
       baseURL: this.baseUrl,
@@ -26,7 +27,9 @@ export class RequestBuilder {
     this.axiosInstance.interceptors.request.use(
       async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
         // eslint-disable-next-line @typescript-eslint/tslint/config
-        config.headers.Authorization = await this.getAuthorizationHeader();
+        config.headers.Authorization =
+          // eslint-disable-next-line @typescript-eslint/tslint/config
+          config.headers.Authorization ?? (this.authorizationHeader as string) ?? (await this.getAuthorizationHeader());
 
         return config;
       },
@@ -43,6 +46,7 @@ export class RequestBuilder {
           return config;
         },
       );
+
       this.axiosInstance.interceptors.response.use(
         <T>(response: AxiosResponse<T>): AxiosResponse<T> => {
           logger.info(
@@ -168,6 +172,23 @@ export class RequestBuilder {
     const response: AxiosResponse<T> = await this.axiosInstance.request(config);
 
     return response.data;
+  }
+
+  /**
+   * Set the property authorizationHeader
+   * @param authorizationHeader : authorization to set
+   */
+  public set authorizationHeader(authorizationHeader: string | undefined) {
+    // eslint-disable-next-line no-underscore-dangle
+    this._authorizationHeader = authorizationHeader;
+  }
+
+  /**
+   * Get the property authorizationHeader
+   */
+  public get authorizationHeader(): string | undefined {
+    // eslint-disable-next-line no-underscore-dangle
+    return this._authorizationHeader;
   }
 }
 

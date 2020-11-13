@@ -391,7 +391,7 @@ describe('Tests related to the RequestBuilder class', () => {
       response: [],
       authorization,
     });
-    requestBuilder.setAuthorizationHeader(authorization);
+    requestBuilder.authorizationHeader = authorization;
 
     await requestBuilder.request({
       method: 'GET',
@@ -401,6 +401,41 @@ describe('Tests related to the RequestBuilder class', () => {
     expect(oAuthServer.isDone()).toBeFalsy();
     expect(randomAlgoanServer.isDone()).toBeTruthy();
     expect((requestBuilder as any).accessTokenInstance).toBeUndefined();
-    expect((requestBuilder as any).authorizationHeader).toBeDefined();
+    expect((requestBuilder as any)._authorizationHeader).toBeDefined();
+  });
+
+  it('RB011 - should call the token API once - authorization in RequestBuilder constructor', async () => {
+    const authorization: string = 'Bearer accesstoken';
+    const requestBuilder: RequestBuilder = new RequestBuilder(
+      baseUrl,
+      {
+        clientId: 'clientId',
+      },
+      {},
+      authorization,
+    );
+    const oAuthServer: nock.Scope = getOAuthServer({
+      baseUrl,
+      isRefreshToken: false,
+      isUserPassword: true,
+      nbOfCalls: 1,
+    });
+    const randomAlgoanServer: nock.Scope = getFakeAlgoanServer({
+      baseUrl,
+      method: 'get',
+      path: '/',
+      response: [],
+      authorization,
+    });
+
+    await requestBuilder.request({
+      method: 'GET',
+      url: '/',
+    });
+
+    expect(oAuthServer.isDone()).toBeFalsy();
+    expect(randomAlgoanServer.isDone()).toBeTruthy();
+    expect((requestBuilder as any).accessTokenInstance).toBeUndefined();
+    expect((requestBuilder as any)._authorizationHeader).toBeDefined();
   });
 });

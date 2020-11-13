@@ -19,7 +19,7 @@ export class RequestBuilder {
     private readonly baseUrl: string,
     private readonly credentials: Credentials,
     options?: { debug?: boolean; logger?: Logger },
-    private authorizationHeader?: string,
+    private _authorizationHeader?: string,
   ) {
     this.axiosInstance = Axios.create({
       baseURL: this.baseUrl,
@@ -178,8 +178,17 @@ export class RequestBuilder {
    * Set the property authorizationHeader
    * @param authorizationHeader : authorization to set
    */
-  public setAuthorizationHeader(authorizationHeader: string): void {
-    this.authorizationHeader = authorizationHeader;
+  public set authorizationHeader(authorizationHeader: string | undefined) {
+    // eslint-disable-next-line no-underscore-dangle
+    this._authorizationHeader = authorizationHeader;
+  }
+
+  /**
+   * Get the property authorizationHeader
+   */
+  public get authorizationHeader(): string | undefined {
+    // eslint-disable-next-line no-underscore-dangle
+    return this._authorizationHeader;
   }
 }
 

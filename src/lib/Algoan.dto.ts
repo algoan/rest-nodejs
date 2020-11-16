@@ -89,6 +89,7 @@ export interface PostBanksUserAccountDTO {
   reference?: string;
   savingsDetails?: string;
   status?: 'MANUAL' | 'ACTIVE' | 'ERROR' | 'NOT_FOUND' | 'CLOSED';
+  owner?: { name?: string };
 }
 
 /**

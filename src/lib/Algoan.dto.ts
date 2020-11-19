@@ -180,4 +180,5 @@ export interface PostBanksUserDTO {
     bankreaderLinkRequired?: boolean;
   };
   partnerId?: string;
+  applicationId?: string;
 }

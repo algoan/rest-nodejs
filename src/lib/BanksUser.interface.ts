@@ -33,6 +33,7 @@ export interface PlugIn {
   budgetInsightBank?: {
     baseUrl: string;
     token: string;
+    clientId: string;
   };
 }
 

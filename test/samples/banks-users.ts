@@ -20,6 +20,7 @@ export const banksUser: IBanksUser = {
     budgetInsightBank: {
       baseUrl: 'mockBaseUrl',
       token: 'mockToken',
+      clientId: 'mockClientId',
     },
   },
   scores: [],

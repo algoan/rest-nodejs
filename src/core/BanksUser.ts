@@ -12,6 +12,7 @@ import {
   BanksUserAccount,
   PostBanksUserDTO,
   Aden,
+  AdenTriggers,
 } from '../lib';
 import { RequestBuilder } from '../RequestBuilder';
 
@@ -62,7 +63,7 @@ export class BanksUser {
   /**
    * ADEN triggers
    */
-  public adenTriggers?: { onSynchronizationFinished?: boolean; bankreaderLinkRequired?: boolean };
+  public adenTriggers?: AdenTriggers;
   /**
    * Score result
    */

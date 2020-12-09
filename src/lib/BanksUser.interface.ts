@@ -21,7 +21,7 @@ export interface IBanksUser {
   plugIn?: PlugIn;
   scores: Score[];
   analysis?: Analysis;
-  adenTriggers?: { onSynchronizationFinished?: boolean; bankreaderLinkRequired?: boolean };
+  adenTriggers?: AdenTriggers;
   partnerId?: string;
   aden?: Aden;
 }
@@ -35,6 +35,15 @@ export interface PlugIn {
     token: string;
     clientId: string;
   };
+}
+
+/**
+ * Flags for the score trigger
+ */
+export interface AdenTriggers {
+  onSynchronizationFinished?: boolean;
+  bankreaderLinkRequired?: boolean;
+  bankreaderConfigurationRequired?: boolean;
 }
 
 /**

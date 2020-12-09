@@ -8,7 +8,7 @@ import {
 } from './Algoan.enum';
 import { SubscriptionStatus } from './Algoan.interface';
 import { ApplicationStatus, ExternalError } from './Application.interface';
-import { PlugIn, Score, Analysis, LoanDetails } from './BanksUser.interface';
+import { PlugIn, Score, Analysis, LoanDetails, AdenTriggers } from './BanksUser.interface';
 import {
   DocumentPeriod,
   ESPlugIn,
@@ -175,10 +175,7 @@ export interface PatchSignatureDTO {
  */
 export interface PostBanksUserDTO {
   callbackUrl?: string;
-  adenTriggers?: {
-    onSynchronizationFinished?: boolean;
-    bankreaderLinkRequired?: boolean;
-  };
+  adenTriggers?: AdenTriggers;
   partnerId?: string;
   applicationId?: string;
 }

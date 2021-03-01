@@ -14,16 +14,21 @@ export class RequestBuilder {
    * Access token instance
    */
   private accessTokenInstance?: AccessToken;
+  /**
+   * API version
+   */
+  public apiVersion: number;
 
   constructor(
     private readonly baseUrl: string,
     private readonly credentials: Credentials,
-    options?: { debug?: boolean; logger?: Logger },
+    options?: { debug?: boolean; logger?: Logger; version?: number },
     private _authorizationHeader?: string,
   ) {
     this.axiosInstance = Axios.create({
       baseURL: this.baseUrl,
     });
+    this.apiVersion = options?.version ?? 1;
     this.axiosInstance.interceptors.request.use(
       async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
         // eslint-disable-next-line @typescript-eslint/tslint/config
@@ -89,7 +94,7 @@ export class RequestBuilder {
 
     if (this.accessTokenInstance !== undefined && isAccessTokenExpired && !isRefreshTokenExpired) {
       const token: AxiosResponse<OAuthResponse> = await Axios.post<OAuthResponse>(
-        `${this.baseUrl}/v1/oauth/token`,
+        `${this.baseUrl}/v${this.apiVersion}/oauth/token`,
         stringify({
           refresh_token: this.accessTokenInstance.refresh_token,
           grant_type: 'refresh_token',
@@ -114,7 +119,7 @@ export class RequestBuilder {
         : 'client_credentials';
 
     const request: AxiosResponse<OAuthResponse> = await Axios.post<OAuthResponse>(
-      `${this.baseUrl}/v1/oauth/token`,
+      `${this.baseUrl}/v${this.apiVersion}/oauth/token`,
       stringify({
         client_id: this.credentials.clientId,
         client_secret: this.credentials.clientSecret,

@@ -13,6 +13,7 @@ export const getOAuthServer = (
     isUserPassword: boolean;
     expiresIn?: number;
     refreshExpiresIn?: number;
+    version?: number;
   } = {
     baseUrl: 'http://localhost:3000',
     isRefreshToken: false,
@@ -36,7 +37,10 @@ export const getOAuthServer = (
     return params.isRefreshToken ? body.grant_type === 'refresh_token' : body.grant_type === 'client_credentials';
   };
 
-  let nockInstance: nock.Interceptor = nock(params.baseUrl).post('/v1/oauth/token', isRequestBodyValid);
+  let nockInstance: nock.Interceptor = nock(params.baseUrl).post(
+    `/v${params.version ?? 1}/oauth/token`,
+    isRequestBodyValid,
+  );
 
   if (params.nbOfCalls > 1) {
     nockInstance = nockInstance.times(params.nbOfCalls);

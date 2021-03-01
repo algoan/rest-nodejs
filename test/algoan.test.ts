@@ -49,6 +49,7 @@ describe('Tests related to the Algoan class', () => {
         baseUrl,
         clientId: 'a',
         clientSecret: 'b',
+        version: 1,
       });
 
       await client.initRestHooks('http', [EventName.APPLICATION_UPDATED, EventName.BANKREADER_COMPLETED], 'a');

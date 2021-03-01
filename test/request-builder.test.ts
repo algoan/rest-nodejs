@@ -58,6 +58,41 @@ describe('Tests related to the RequestBuilder class', () => {
     expect((requestBuilder as any).accessTokenInstance).toBeDefined();
   });
 
+  it('RB001a - should call the token API the next version', async () => {
+    const requestBuilder: RequestBuilder = new RequestBuilder(
+      baseUrl,
+      {
+        clientId: 'clientId',
+        clientSecret: 'clientSecret',
+      },
+      {
+        version: 2,
+      },
+    );
+    const oAuthServer: nock.Scope = getOAuthServer({
+      baseUrl,
+      isRefreshToken: false,
+      isUserPassword: false,
+      nbOfCalls: 1,
+      version: 2,
+    });
+    const randomAlgoanServer: nock.Scope = getFakeAlgoanServer({
+      baseUrl,
+      method: 'get',
+      path: '/',
+      response: [],
+    });
+
+    await requestBuilder.request({
+      method: 'GET',
+      url: '/',
+    });
+
+    expect(oAuthServer.isDone()).toBeTruthy();
+    expect(randomAlgoanServer.isDone()).toBeTruthy();
+    expect((requestBuilder as any).accessTokenInstance).toBeDefined();
+  });
+
   it('RB002 - should call the token API twice - refresh token', async () => {
     const requestBuilder: RequestBuilder = new RequestBuilder(baseUrl, {
       clientId: 'clientId',

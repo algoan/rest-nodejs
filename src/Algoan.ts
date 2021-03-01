@@ -13,6 +13,10 @@ export class Algoan {
    */
   public baseUrl: string;
   /**
+   * API version
+   */
+  public version: number;
+  /**
    * Service accounts stored in-memory
    */
   public serviceAccounts: ServiceAccount[];
@@ -23,6 +27,7 @@ export class Algoan {
 
   constructor(parameters: AlgoanOptions) {
     this.baseUrl = parameters.baseUrl;
+    this.version = parameters.version ?? 1;
     const defaultLoggerOptions: LoggerOptions = {
       transports: [
         new transports.Console({
@@ -135,4 +140,5 @@ interface AlgoanOptions {
   password?: string;
   debug?: boolean;
   loggerOptions?: LoggerOptions;
+  version?: number;
 }

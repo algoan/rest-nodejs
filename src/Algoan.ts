@@ -48,6 +48,7 @@ export class Algoan {
       {
         logger: createLogger({ ...defaultLoggerOptions, ...parameters.loggerOptions }),
         debug: parameters.debug,
+        version: this.version,
       },
     );
     this.serviceAccounts = [];

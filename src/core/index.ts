@@ -7,3 +7,4 @@ export * from './Folder';
 export * from './LegalDocument';
 export * from './Signature';
 export * from './SupportingDocument';
+export * from './Application';

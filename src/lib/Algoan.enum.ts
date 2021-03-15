@@ -67,6 +67,10 @@ export enum EventName {
   KYC_OTHERS_LINK_REQUIRED = 'kyc_others_link_required',
   KYC_OTHERS_COMPLETED = 'kyc_others_completed',
   KYC_OTHERS_CONFIGURATION_REQUIRED = 'kyc_others_configuration_required',
+
+  // V2 events
+  AGGREGATOR_LINK_REQUIRED = 'aggregator_link_required',
+  BANK_DETAILS_REQUIRED = 'bank_details_required',
 }
 
 /**

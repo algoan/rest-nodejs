@@ -49,18 +49,22 @@ export class ServiceAccount {
    */
   private readonly requestBuilder: RequestBuilder;
 
-  constructor(baseUrl: string, params: IServiceAccount, options?: { apiVersion?: number; }) {
+  constructor(baseUrl: string, params: IServiceAccount, options?: { apiVersion?: number }) {
     this.id = params.id;
     this.clientId = params.clientId;
     this.clientSecret = params.clientSecret;
     this.createdAt = new Date(params.createdAt);
     this.subscriptions = [];
-    this.requestBuilder = new RequestBuilder(baseUrl, {
-      clientId: params.clientId,
-      clientSecret: params.clientSecret,
-    }, {
-      version: options?.apiVersion,
-    });
+    this.requestBuilder = new RequestBuilder(
+      baseUrl,
+      {
+        clientId: params.clientId,
+        clientSecret: params.clientSecret,
+      },
+      {
+        version: options?.apiVersion,
+      },
+    );
     this.config = params.config;
   }
 
@@ -74,9 +78,12 @@ export class ServiceAccount {
       url: '/v1/service-accounts',
     });
 
-    return serviceAccounts.map((sa: IServiceAccount) => new ServiceAccount(baseUrl, sa, {
-      apiVersion: requestBuilder.apiVersion,
-    }));
+    return serviceAccounts.map(
+      (sa: IServiceAccount) =>
+        new ServiceAccount(baseUrl, sa, {
+          apiVersion: requestBuilder.apiVersion,
+        }),
+    );
   }
 
   /**

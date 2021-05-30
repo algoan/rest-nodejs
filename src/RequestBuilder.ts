@@ -93,46 +93,19 @@ export class RequestBuilder {
     }
 
     if (this.accessTokenInstance !== undefined && isAccessTokenExpired && !isRefreshTokenExpired) {
-      const token: AxiosResponse<OAuthResponse> = await Axios.post<OAuthResponse>(
-        `${this.baseUrl}/v${this.apiVersion}/oauth/token`,
-        stringify({
-          refresh_token: this.accessTokenInstance.refresh_token,
-          grant_type: 'refresh_token',
-          client_id: this.credentials.clientId,
-          client_secret: this.credentials.clientSecret,
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        },
-      );
+      let token: AxiosResponse<OAuthResponse>;
+      try {
+        token = await this.generateToken(true);
+      } catch (err) {
+        token = await this.generateToken();
+      }
 
       this.accessTokenInstance = this.getAccessTokenInstance(token.data);
 
       return `Bearer ${this.accessTokenInstance.access_token}`;
     }
 
-    const grantType: string =
-      this.credentials.username !== undefined && this.credentials.password !== undefined
-        ? 'password'
-        : 'client_credentials';
-
-    const request: AxiosResponse<OAuthResponse> = await Axios.post<OAuthResponse>(
-      `${this.baseUrl}/v${this.apiVersion}/oauth/token`,
-      stringify({
-        client_id: this.credentials.clientId,
-        client_secret: this.credentials.clientSecret,
-        username: this.credentials.username,
-        password: this.credentials.password,
-        grant_type: grantType,
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      },
-    );
+    const request: AxiosResponse<OAuthResponse> = await this.generateToken();
 
     this.accessTokenInstance = this.getAccessTokenInstance(request.data);
 
@@ -194,6 +167,38 @@ export class RequestBuilder {
   public get authorizationHeader(): string | undefined {
     // eslint-disable-next-line no-underscore-dangle
     return this._authorizationHeader;
+  }
+
+  /**
+   * Call the auth route to generate a token
+   * @param fromRefreshToken if set to true, use the grant type refresh_token
+   * @returns
+   */
+  private generateToken(fromRefreshToken: boolean = false): Promise<AxiosResponse<OAuthResponse>> {
+    const grantType: string =
+      this.credentials.username !== undefined && this.credentials.password !== undefined
+        ? 'password'
+        : 'client_credentials';
+
+    const body = fromRefreshToken
+      ? {
+          refresh_token: (this.accessTokenInstance as AccessToken).refresh_token,
+          grant_type: 'refresh_token',
+          client_id: this.credentials.clientId,
+          client_secret: this.credentials.clientSecret,
+        }
+      : {
+          client_id: this.credentials.clientId,
+          client_secret: this.credentials.clientSecret,
+          username: this.credentials.username,
+          password: this.credentials.password,
+          grant_type: grantType,
+        };
+    return Axios.post<OAuthResponse>(`${this.baseUrl}/v${this.apiVersion}/oauth/token`, stringify(body), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
   }
 }
 

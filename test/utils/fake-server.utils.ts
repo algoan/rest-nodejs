@@ -14,6 +14,7 @@ export const getOAuthServer = (
     expiresIn?: number;
     refreshExpiresIn?: number;
     version?: number;
+    error?: string;
   } = {
     baseUrl: 'http://localhost:3000',
     isRefreshToken: false,
@@ -46,7 +47,7 @@ export const getOAuthServer = (
     nockInstance = nockInstance.times(params.nbOfCalls);
   }
 
-  return nockInstance.reply(200, responseBody);
+  return params.error ? nockInstance.replyWithError(params.error) : nockInstance.reply(200, responseBody);
 };
 
 /**

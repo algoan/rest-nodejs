@@ -473,4 +473,53 @@ describe('Tests related to the RequestBuilder class', () => {
     expect((requestBuilder as any).accessTokenInstance).toBeUndefined();
     expect((requestBuilder as any)._authorizationHeader).toBeDefined();
   });
+
+  it('RB012 - should call the token API twice - error on refresh', async () => {
+    const requestBuilder: RequestBuilder = new RequestBuilder(baseUrl, {
+      clientId: 'clientId',
+      clientSecret: 'clientSecret',
+    });
+    const oAuthServer: nock.Scope = getOAuthServer({
+      baseUrl,
+      isRefreshToken: false,
+      isUserPassword: false,
+      nbOfCalls: 2,
+      expiresIn: 0.05,
+      refreshExpiresIn: 1000,
+    });
+    const refreshTokenServer: nock.Scope = getOAuthServer({
+      baseUrl,
+      isRefreshToken: true,
+      isUserPassword: false,
+      nbOfCalls: 1,
+      error: 'an error occured',
+    });
+    const randomAlgoanServer: nock.Scope = getFakeAlgoanServer({
+      baseUrl,
+      method: 'get',
+      path: '/',
+      response: [],
+      nbOfCalls: 2,
+    });
+
+    await requestBuilder.request({
+      method: 'GET',
+      url: '/',
+    });
+
+    expect(oAuthServer.isDone()).toBeFalsy();
+    expect(randomAlgoanServer.isDone()).toBeFalsy();
+    expect((requestBuilder as any).accessTokenInstance).toBeDefined();
+    expect(refreshTokenServer.isDone()).toBeFalsy();
+
+    await delay(500);
+
+    await requestBuilder.request({
+      method: 'GET',
+      url: '/',
+    });
+    expect(refreshTokenServer.isDone()).toBeTruthy();
+    expect(oAuthServer.isDone()).toBeTruthy();
+    expect(randomAlgoanServer.isDone()).toBeTruthy();
+  });
 });

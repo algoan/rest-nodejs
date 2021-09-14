@@ -90,6 +90,8 @@ export interface PostBanksUserAccountDTO {
   savingsDetails?: string;
   status?: 'MANUAL' | 'ACTIVE' | 'ERROR' | 'NOT_FOUND' | 'CLOSED';
   owner?: { name?: string };
+  // eslint-disable-next-line
+  number?: string;
 }
 
 /**

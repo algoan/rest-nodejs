@@ -103,6 +103,8 @@ export interface BanksUserAccount {
   reference?: string;
   savingsDetails?: string;
   status?: 'MANUAL' | 'ACTIVE' | 'ERROR' | 'NOT_FOUND' | 'CLOSED';
+  // eslint-disable-next-line
+  number?: string;
 }
 
 /**

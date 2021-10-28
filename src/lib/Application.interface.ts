@@ -94,6 +94,10 @@ export interface IApplication {
    */
   externalErrors?: ExternalError[];
   /**
+   * Data from partner system
+   */
+  partnerData?: PartnerData;
+  /**
    * Timestamps
    */
   createdAt: Date;
@@ -492,4 +496,12 @@ export interface ExternalError {
   message: string;
   code?: string;
   tags?: string[];
+}
+
+/**
+ * Partner Data
+ */
+ export interface PartnerData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }

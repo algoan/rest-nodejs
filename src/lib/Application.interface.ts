@@ -10,7 +10,6 @@ export interface IApplication {
    * load Term
    */
   loanTerm?: number;
-
   /**
    * Requested loan amount
    */
@@ -103,7 +102,6 @@ export interface IApplication {
   createdAt: Date;
   updatedAt: Date;
 }
-
 /**
  * ProjectType
  */
@@ -113,7 +111,6 @@ export enum ProjectType {
   WORK = 'WORK',
   PERSONAL = 'PERSONAL',
 }
-
 /**
  * ApplicationStatus
  */
@@ -124,7 +121,6 @@ export enum ApplicationStatus {
   PENDING = 'PENDING',
   ERROR = 'ERROR',
 }
-
 /**
  * MaritalStatus
  */
@@ -137,7 +133,6 @@ export enum MaritalStatus {
   WIDOWED = 'WIDOWED',
   CIVIL_PARTNERSHIP = 'CIVIL_PARTNERSHIP',
 }
-
 /**
  * ResidentialStatus
  */
@@ -150,7 +145,6 @@ export enum ResidentialStatus {
   HOUSED_BY_FRIEND = 'HOUSED_BY_FRIEND',
   OTHER = 'OTHER',
 }
-
 /**
  * HousingType
  */
@@ -159,7 +153,6 @@ export enum HousingType {
   HOUSE = 'HOUSE',
   OTHER = 'OTHER',
 }
-
 /**
  * OptIn
  */
@@ -173,7 +166,6 @@ export interface OptIn {
    */
   partnerOptIn?: boolean;
 }
-
 /**
  * extraProperties
  */
@@ -181,7 +173,6 @@ export interface ExtraProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
-
 /**
  * Applicant
  */
@@ -201,7 +192,6 @@ export interface Applicant {
    */
   extraProperties?: ExtraProperties;
 }
-
 /**
  * InsurtanceId object
  */
@@ -209,7 +199,6 @@ export interface InsuranceId {
   insuranceId?: string;
   insurancePartnerId?: string;
 }
-
 /**
  * Bank
  */
@@ -239,7 +228,6 @@ export interface Bank {
    */
   bic?: string;
 }
-
 /**
  * AccountType
  */
@@ -248,7 +236,6 @@ export enum BankAccountType {
   JOINT = 'JOINT',
   OTHER = 'OTHER',
 }
-
 /**
  * ProfessionalSituation
  */
@@ -300,7 +287,6 @@ export interface ProfessionalSituation {
    */
   employerCountryCode?: string;
 }
-
 /**
  * business sector
  */
@@ -313,7 +299,6 @@ export enum BusinessSector {
   RETIRED = 'RETIRED',
   OTHERS = 'OTHERS',
 }
-
 /**
  * Contract type
  */
@@ -323,7 +308,6 @@ export enum ContractType {
   TEMPORARY = 'TEMPORARY',
   OTHER = 'OTHER',
 }
-
 /**
  * Identity
  */
@@ -369,7 +353,6 @@ export interface Identity {
    */
   birthCountry?: string;
 }
-
 /**
  * Civility
  */
@@ -377,7 +360,6 @@ export enum Civility {
   MISTER = 'MISTER',
   MISS = 'MISS',
 }
-
 /**
  * Incomes
  */
@@ -389,7 +371,6 @@ export interface Incomes {
   familyAllowance?: number;
   pensionIncomes?: number;
 }
-
 /**
  * Contact
  */
@@ -407,7 +388,6 @@ export interface Contact {
   mobilePhoneNumber?: string;
   fixedLinePhoneNumber?: string;
 }
-
 /**
  * Charges
  */
@@ -433,7 +413,6 @@ export interface Charges {
    */
   currentLoans?: ChargeCurrentLoan[];
 }
-
 /**
  * ChargesCurrentLoans
  */
@@ -466,7 +445,6 @@ export interface ChargeCurrentLoan {
    */
   bankName?: string;
 }
-
 /**
  * How often a user will pay paymentAmount
  */
@@ -476,7 +454,6 @@ export enum PaymentFrequency {
   MONTHLY = 'MONTHLY',
   YEARLY = 'YEARLY',
 }
-
 /**
  * LoanType
  */
@@ -488,7 +465,6 @@ export enum LoanType {
   MORTGAGE = 'MORTGAGE',
   OTHER = 'OTHER',
 }
-
 /**
  * External error
  */
@@ -497,7 +473,6 @@ export interface ExternalError {
   code?: string;
   tags?: string[];
 }
-
 /**
  * Partner Data
  */

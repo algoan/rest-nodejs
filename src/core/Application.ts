@@ -11,6 +11,7 @@ import {
   ApplicationStatus,
   ExternalError,
   PatchApplicationDTO,
+  PartnerData,
 } from '../lib';
 
 /**
@@ -110,6 +111,10 @@ export class Application implements IApplication {
    */
   public externalErrors?: ExternalError[];
   /**
+   * External errors
+   */
+  public partnerData?: PartnerData;
+  /**
    * Timestamps
    */
   public createdAt: Date;
@@ -139,6 +144,7 @@ export class Application implements IApplication {
     this.coApplicant = params.coApplicant;
     this.userSelection = params.userSelection;
     this.status = params.status;
+    this.partnerData = params.partnerData;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
   }
@@ -193,5 +199,6 @@ export class Application implements IApplication {
     this.userSelection = application.userSelection;
     this.status = application.status;
     this.externalErrors = application.externalErrors;
+    this.partnerData = application.partnerData;
   }
 }

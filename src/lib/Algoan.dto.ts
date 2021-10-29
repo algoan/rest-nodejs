@@ -7,7 +7,7 @@ import {
   EventStatus,
 } from './Algoan.enum';
 import { SubscriptionStatus } from './Algoan.interface';
-import { ApplicationStatus, ExternalError } from './Application.interface';
+import { ApplicationStatus, ExternalError, PartnerData } from './Application.interface';
 import { PlugIn, Score, Analysis, LoanDetails, AdenTriggers } from './BanksUser.interface';
 import {
   DocumentPeriod,
@@ -119,6 +119,7 @@ export interface PatchApplicationDTO {
   skipAggregation?: boolean;
   skipGDPF?: boolean;
   externalErrors?: ExternalError[];
+  partnerData?:PartnerData;
 }
 
 /**

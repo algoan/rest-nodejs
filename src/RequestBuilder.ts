@@ -31,7 +31,8 @@ export class RequestBuilder {
     this.apiVersion = options?.version ?? 1;
     this.axiosInstance.interceptors.request.use(
       async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        // eslint-disable-next-line @typescript-eslint/tslint/config
+        /* istanbul ignore next */
+        config.headers = config.headers ?? {};
         config.headers.Authorization =
           // eslint-disable-next-line @typescript-eslint/tslint/config
           config.headers.Authorization ?? (this.authorizationHeader as string) ?? (await this.getAuthorizationHeader());

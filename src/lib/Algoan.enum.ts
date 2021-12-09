@@ -4,6 +4,7 @@
 export enum EventName {
   RECOVERY_REQUIRED = 'recovery_required',
   SERVICE_ACCOUNT_CREATED = 'service_account_created',
+  SERVICE_ACCOUNT_UPDATED = 'service_account_updated',
   SERVICE_ACCOUNT_DELETED = 'service_account_deleted',
   PRODUCTS_REQUIRED = 'products_required',
   PRICINGS_REQUIRED = 'pricings_required',

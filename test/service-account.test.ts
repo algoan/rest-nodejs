@@ -179,13 +179,13 @@ describe('Tests related to the ServiceAccount class', () => {
     it('SA32 - should get and update subscriptions', async () => {
       const mockUpdate: jest.Mock = jest.fn();
       getSubscriptionSpy = jest.spyOn(Subscription, 'get').mockResolvedValue([
-        ({
+        {
           status: 'DISABLE',
           target: 'something',
           eventName: EventName.APPLICATION_UPDATED,
           id: '1',
           update: mockUpdate,
-        } as unknown) as Subscription,
+        } as unknown as Subscription,
       ]);
       const serviceAccount: ServiceAccount = new ServiceAccount(baseUrl, {
         clientId: 'a',

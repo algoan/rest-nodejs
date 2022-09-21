@@ -29,29 +29,25 @@ export class RequestBuilder {
       baseURL: this.baseUrl,
     });
     this.apiVersion = options?.version ?? 1;
-    this.axiosInstance.interceptors.request.use(
-      async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        /* istanbul ignore next */
-        config.headers = config.headers ?? {};
-        config.headers.Authorization =
-          // eslint-disable-next-line @typescript-eslint/tslint/config
-          config.headers.Authorization ?? (this.authorizationHeader as string) ?? (await this.getAuthorizationHeader());
+    this.axiosInstance.interceptors.request.use(async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+      /* istanbul ignore next */
+      config.headers = config.headers ?? {};
+      config.headers.Authorization =
+        // eslint-disable-next-line @typescript-eslint/tslint/config
+        config.headers.Authorization ?? (this.authorizationHeader as string) ?? (await this.getAuthorizationHeader());
 
-        return config;
-      },
-    );
+      return config;
+    });
     if (options?.debug === true && options.logger !== undefined) {
       const logger: Logger = options.logger;
-      this.axiosInstance.interceptors.request.use(
-        async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-          logger.info(`${this.credentials.clientId} - [${config.method} ${config.url}] Incoming request`, {
-            headers: config.headers,
-            data: config.data,
-          });
+      this.axiosInstance.interceptors.request.use(async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+        logger.info(`${this.credentials.clientId} - [${config.method} ${config.url}] Incoming request`, {
+          headers: config.headers,
+          data: config.data,
+        });
 
-          return config;
-        },
-      );
+        return config;
+      });
 
       this.axiosInstance.interceptors.response.use(
         <T>(response: AxiosResponse<T>): AxiosResponse<T> => {

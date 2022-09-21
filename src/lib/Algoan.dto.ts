@@ -119,7 +119,7 @@ export interface PatchApplicationDTO {
   skipAggregation?: boolean;
   skipGDPF?: boolean;
   externalErrors?: ExternalError[];
-  partnerData?:PartnerData;
+  partnerData?: PartnerData;
 }
 
 /**

@@ -8,3 +8,5 @@ export * from './LegalDocument';
 export * from './Signature';
 export * from './SupportingDocument';
 export * from './Application';
+export * from './WidgetConfig';
+export * from './IFrameConfig';

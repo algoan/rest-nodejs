@@ -1,5 +1,5 @@
 import { RequestBuilder } from '../RequestBuilder';
-import { IServiceAccount } from '..';
+import { IServiceAccount, WidgetConfig } from '..';
 import {
   PostSignatureDTO,
   PostSubscriptionDTO,
@@ -39,6 +39,11 @@ export class ServiceAccount {
    * Additional properties for the serviceAccount configuration
    */
   public config?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  /**
+   * Widget configurations for the serviceAccount
+   */
+  public widgetConfig?: WidgetConfig;
 
   /**
    * Subscriptions attached to the service account

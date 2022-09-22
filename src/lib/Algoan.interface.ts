@@ -10,6 +10,23 @@ export interface IServiceAccount {
   createdAt: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   config?: any;
+  widgetConfig?: IWidgetConfig;
+}
+
+/**
+ * Widget configuration interface
+ */
+export interface IWidgetConfig {
+  iframe?: IIFrameConfig;
+}
+
+/**
+ * IFrame configuration interface
+ */
+export interface IIFrameConfig {
+  language?: string;
+  font?: string;
+  fontColor?: string;
 }
 
 /**

@@ -1,5 +1,5 @@
 import { stringify } from 'querystring';
-import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { Logger } from 'winston';
 
 /**
@@ -25,11 +25,11 @@ export class RequestBuilder {
     options?: { debug?: boolean; logger?: Logger; version?: number },
     private _authorizationHeader?: string,
   ) {
-    this.axiosInstance = Axios.create({
+    this.axiosInstance = axios.create({
       baseURL: this.baseUrl,
     });
     this.apiVersion = options?.version ?? 1;
-    this.axiosInstance.interceptors.request.use(async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+    this.axiosInstance.interceptors.request.use(async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
       /* istanbul ignore next */
       config.headers = config.headers ?? {};
       config.headers.Authorization =
@@ -40,7 +40,7 @@ export class RequestBuilder {
     });
     if (options?.debug === true && options.logger !== undefined) {
       const logger: Logger = options.logger;
-      this.axiosInstance.interceptors.request.use(async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+      this.axiosInstance.interceptors.request.use(async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
         logger.info(`${this.credentials.clientId} - [${config.method} ${config.url}] Incoming request`, {
           headers: config.headers,
           data: config.data,
@@ -64,7 +64,7 @@ export class RequestBuilder {
         async <T>(error: AxiosError<T>): Promise<AxiosError<T>> => {
           /* istanbul ignore next */
           logger.error(
-            `ERROR ${this.credentials.clientId} - [${error?.response?.status} ${error.config.method} ${error.config.url}] Outcoming request`,
+            `ERROR ${this.credentials.clientId} - [${error?.response?.status} ${error.config?.method} ${error.config?.url}] Outcoming request`,
             {
               data: error?.response?.data,
             },
@@ -191,7 +191,7 @@ export class RequestBuilder {
           password: this.credentials.password,
           grant_type: grantType,
         };
-    return Axios.post<OAuthResponse>(`${this.baseUrl}/v${this.apiVersion}/oauth/token`, stringify(body), {
+    return axios.post<OAuthResponse>(`${this.baseUrl}/v${this.apiVersion}/oauth/token`, stringify(body), {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
